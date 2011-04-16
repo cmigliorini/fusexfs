@@ -241,11 +241,11 @@ xfs_dir2_leaf_getdents(
                     //                                   ra_offset),
                     //                  (int)BTOBB(mp->m_dirblksize));
                     //TODO: figure out flags, flags =0
-					libxfs_readbuf(mp->m_dev,
-                                   XFS_FSB_TO_DADDR(mp,
-                                                    map[ra_index].br_startblock +
-                                                    ra_offset),
-                                   (int)BTOBB(mp->m_dirblksize), 0);
+					//libxfs_readbuf(mp->m_dev,
+                    //               XFS_FSB_TO_DADDR(mp,
+                    //                                map[ra_index].br_startblock +
+                    //                                ra_offset),
+                    //               (int)BTOBB(mp->m_dirblksize), 0);
 					ra_current = i;
 				}
 				/*
