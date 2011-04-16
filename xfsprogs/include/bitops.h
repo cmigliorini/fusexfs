@@ -1,11 +1,11 @@
 #ifndef __BITOPS_H__
 #define __BITOPS_H__
 
+#define fls fls_xfs
 /*
  * fls: find last bit set.
  */
-
-static inline int fls(int x)
+static inline int fls_xfs(int x)
 {
 	int r = 32;
 
@@ -48,5 +48,4 @@ static inline unsigned fls_long(unsigned long l)
                 return fls(l);
         return fls64(l);
 }
-
 #endif
