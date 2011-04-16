@@ -33,13 +33,13 @@
 					PBXFileDataSource_Target_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 324629137;
-			PBXWorkspaceStateSaveDate = 324629137;
+			PBXPerProjectTemplateStateSaveDate = 324631597;
+			PBXWorkspaceStateSaveDate = 324631597;
 		};
 		perUserProjectItems = {
-			E009D4341359786E00D50443 /* PBXTextBookmark */ = E009D4341359786E00D50443 /* PBXTextBookmark */;
-			E009D4351359786E00D50443 /* PBXTextBookmark */ = E009D4351359786E00D50443 /* PBXTextBookmark */;
-			E009D4361359786E00D50443 /* PBXTextBookmark */ = E009D4361359786E00D50443 /* PBXTextBookmark */;
+			E009D4341359786E00D50443 = E009D4341359786E00D50443 /* PBXTextBookmark */;
+			E009D4351359786E00D50443 = E009D4351359786E00D50443 /* PBXTextBookmark */;
+			E009D4361359786E00D50443 = E009D4361359786E00D50443 /* PBXTextBookmark */;
 		};
 		sourceControlManager = E009D42B1359729400D50443 /* Source Control */;
 		userBuildSettings = {
@@ -94,7 +94,7 @@
 	};
 	E009D431135977C700D50443 /* fuse-xfs.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {519, 245}}";
+			sepNavIntBoundsRect = "{{0, 0}, {519, 237}}";
 			sepNavSelRange = "{133, 0}";
 			sepNavVisRange = "{0, 160}";
 		};
