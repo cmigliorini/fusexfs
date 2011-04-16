@@ -56,6 +56,7 @@ int cli_ls_xfs_filldir(void *dirents, const char *name, int namelen, off_t offse
     print_int(fstats.st_size, 12);
     
     printf(" %s\n", dname);
+    libxfs_iput(inode, 0);
     return 0;
 }
 
@@ -110,8 +111,10 @@ char *fetchline(xfs_mount_t *mp, char *path) {
 
     free_completions();
     r = find_path(mp, path, &inode);
-    if (r == 0)
+    if (r == 0) {
         r = xfs_readdir(inode, NULL, 102400, &ofs, cli_complete_xfs_filldir);
+        libxfs_iput(inode, 0);
+    }
 
     rl_completion_entry_function = (Function *)dir_generator;
     rl_bind_key('\t', rl_complete);
@@ -131,7 +134,7 @@ void goto_parent(char *path) {
 
 int main(int argc, char *argv[]) {
     xfs_mount_t	*mp;
-    xfs_inode_t *inode;
+    xfs_inode_t *inode = NULL;
     xfs_off_t ofs;
     struct filldir_data filldata;
     char *progname = argv[0];
@@ -149,6 +152,7 @@ int main(int argc, char *argv[]) {
         return 1;
     
     while (line = fetchline(mp, path)) {
+        inode = NULL;
         if (strncmp(line, "cd ", 3) == 0) {
             if (strcmp(line+3, "..") == 0) {
                 goto_parent(path);
@@ -246,6 +250,9 @@ int main(int argc, char *argv[]) {
             printf("Unknown command\n");
         }
         free(line);
+        if (inode) {
+            libxfs_iput(inode, 0);
+        }
     }
     libxfs_umount(mp);
     return 0;

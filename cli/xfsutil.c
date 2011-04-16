@@ -834,20 +834,25 @@ int find_path(xfs_mount_t *mp, char *path, xfs_inode_t **result) {
     xfs_ino_t inode;
     struct xfs_name xname;
     int error;
-    
+   
     error = libxfs_iget(mp, NULL, mp->m_sb.sb_rootino, 0, &current, 0);
     assert(error==0);
     
     xname = first_name(path);
     while (xname.len != 0) {
-        if (!(current->i_d.di_mode & S_IFDIR))
-            //TODO: Can't return an integer here, figure out a good signature
+        if (!(current->i_d.di_mode & S_IFDIR)) {
+            libxfs_iput(current, 0);
             return XFS_ERROR(ENOTDIR);
+        }
         
         error = libxfs_dir_lookup(NULL, current, &xname, &inode, NULL);
         if (error != 0) {
             return error;
         }
+
+        /* Done with current: make it available */
+        libxfs_iput(current, 0);
+
         error = libxfs_iget(mp, NULL, inode, 0, &current, 0);
         if (error != 0) {
             printf("Failed to get inode for %s %d\n", xname.name, xname.len);
