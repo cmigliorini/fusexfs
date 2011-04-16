@@ -28,6 +28,7 @@
 /* Begin PBXFileReference section */
 		8DD76FB20486AB0100D96B5E /* fuse-xfs */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "fuse-xfs"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6A0FF2C0290799A04C91782 /* fuse-xfs.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = "fuse-xfs.1"; sourceTree = "<group>"; };
+		E009D431135977C700D50443 /* fuse-xfs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "fuse-xfs.h"; sourceTree = "<group>"; };
 		FFD708640EE669A60026C014 /* fuse_xfs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fuse_xfs.c; sourceTree = "<group>"; };
 		FFD708750EE66DA70026C014 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -56,6 +57,7 @@
 		08FB7795FE84155DC02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				E009D431135977C700D50443 /* fuse-xfs.h */,
 				FFD708640EE669A60026C014 /* fuse_xfs.c */,
 				FFD708750EE66DA70026C014 /* main.c */,
 			);

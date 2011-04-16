@@ -4,6 +4,8 @@
 		activeBuildConfigurationName = Debug;
 		activeExecutable = E009D4221359729100D50443 /* fuse-xfs */;
 		activeTarget = 8DD76FA90486AB0100D96B5E /* fuse-xfs */;
+		addToTargets = (
+		);
 		codeSenseManager = E009D42C1359729400D50443 /* Code sense */;
 		executables = (
 			E009D4221359729100D50443 /* fuse-xfs */,
@@ -33,6 +35,11 @@
 			};
 			PBXPerProjectTemplateStateSaveDate = 324629137;
 			PBXWorkspaceStateSaveDate = 324629137;
+		};
+		perUserProjectItems = {
+			E009D4341359786E00D50443 /* PBXTextBookmark */ = E009D4341359786E00D50443 /* PBXTextBookmark */;
+			E009D4351359786E00D50443 /* PBXTextBookmark */ = E009D4351359786E00D50443 /* PBXTextBookmark */;
+			E009D4361359786E00D50443 /* PBXTextBookmark */ = E009D4361359786E00D50443 /* PBXTextBookmark */;
 		};
 		sourceControlManager = E009D42B1359729400D50443 /* Source Control */;
 		userBuildSettings = {
@@ -84,5 +91,58 @@
 	E009D42C1359729400D50443 /* Code sense */ = {
 		isa = PBXCodeSenseManager;
 		indexTemplatePath = "";
+	};
+	E009D431135977C700D50443 /* fuse-xfs.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {519, 245}}";
+			sepNavSelRange = "{133, 0}";
+			sepNavVisRange = "{0, 160}";
+		};
+	};
+	E009D4341359786E00D50443 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = FFD708750EE66DA70026C014 /* main.c */;
+		name = "main.c: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 495;
+		vrLoc = 0;
+	};
+	E009D4351359786E00D50443 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = E009D431135977C700D50443 /* fuse-xfs.h */;
+		name = "fuse-xfs.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 134;
+		vrLoc = 0;
+	};
+	E009D4361359786E00D50443 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = E009D431135977C700D50443 /* fuse-xfs.h */;
+		name = "fuse-xfs.h: 9";
+		rLen = 0;
+		rLoc = 133;
+		rType = 0;
+		vrLen = 160;
+		vrLoc = 0;
+	};
+	FFD708640EE669A60026C014 /* fuse_xfs.c */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {691, 2834}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{3580, 1415}";
+			sepNavWindowFrame = "{{15, 4}, {750, 774}}";
+		};
+	};
+	FFD708750EE66DA70026C014 /* main.c */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {519, 260}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 495}";
+			sepNavWindowFrame = "{{15, 4}, {750, 774}}";
+		};
 	};
 }
