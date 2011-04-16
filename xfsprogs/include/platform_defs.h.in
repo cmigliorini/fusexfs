@@ -60,7 +60,7 @@ typedef __u16	__bitwise	__be16;
 typedef __u32	__bitwise	__be32;
 typedef __u64	__bitwise	__be64;
 
-typedef struct filldir		filldir_t;
+typedef int (*filldir_t)(void *, const char *, int, off_t, uint64_t, unsigned);
 
 #if defined(__linux__)
 #include <xfs/linux.h>
