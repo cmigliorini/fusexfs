@@ -140,7 +140,9 @@ typedef unsigned char	uchar_t;
 #define B_FALSE		0
 #define B_TRUE		1
 
+#ifndef ENOATTR /*Only define if not supplied by the system */
 #define ENOATTR		989     /* Attribute not found */
+#endif
 #define EFSCORRUPTED	990	/* Filesystem is corrupted */
 #define constpp		char * const *
 
