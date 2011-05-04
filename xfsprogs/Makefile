@@ -1,4 +1,4 @@
-LOCAL_CONFIGURE_OPTIONS=--disable-gettext
+FUSE_XFS_CONFIGURE_OPTIONS = --disable-gettext
 
 #
 # Copyright (c) 2000-2006 Silicon Graphics, Inc.  All Rights Reserved.
@@ -87,7 +87,7 @@ configure:
 	autoconf
 
 include/builddefs: configure
-	./configure $$LOCAL_CONFIGURE_OPTIONS
+	./configure $$LOCAL_CONFIGURE_OPTIONS $(FUSE_XFS_CONFIGURE_OPTIONS)
 
 include/platform_defs.h: include/builddefs
 ## Recover from the removal of $@
