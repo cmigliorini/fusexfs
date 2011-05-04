@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		8DD76FB00486AB0100D96B5E /* fuse-xfs.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = C6A0FF2C0290799A04C91782 /* fuse-xfs.1 */; };
+		E00161681370EC4200824672 /* cli.c in Sources */ = {isa = PBXBuildFile; fileRef = E00161671370EC4200824672 /* cli.c */; };
+		E001616C1370EC6400824672 /* xfsutil.c in Sources */ = {isa = PBXBuildFile; fileRef = E001616B1370EC6400824672 /* xfsutil.c */; };
+		E001616D1370EC6400824672 /* xfsutil.c in Sources */ = {isa = PBXBuildFile; fileRef = E001616B1370EC6400824672 /* xfsutil.c */; };
 		FFD708650EE669A60026C014 /* fuse_xfs.c in Sources */ = {isa = PBXBuildFile; fileRef = FFD708640EE669A60026C014 /* fuse_xfs.c */; };
 		FFD708760EE66DA70026C014 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = FFD708750EE66DA70026C014 /* main.c */; };
 /* End PBXBuildFile section */
@@ -28,6 +31,10 @@
 /* Begin PBXFileReference section */
 		8DD76FB20486AB0100D96B5E /* fuse-xfs */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "fuse-xfs"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6A0FF2C0290799A04C91782 /* fuse-xfs.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = "fuse-xfs.1"; sourceTree = "<group>"; };
+		E00161621370EBB700824672 /* xfs-cli */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "xfs-cli"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E00161671370EC4200824672 /* cli.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = cli.c; path = cli/cli.c; sourceTree = "<group>"; };
+		E001616B1370EC6400824672 /* xfsutil.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = xfsutil.c; path = xfsutil/xfsutil.c; sourceTree = "<group>"; };
+		E001616E1370EC7A00824672 /* xfsutil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xfsutil.h; path = xfsutil/xfsutil.h; sourceTree = "<group>"; };
 		E009D431135977C700D50443 /* fuse-xfs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "fuse-xfs.h"; sourceTree = "<group>"; };
 		FFD708640EE669A60026C014 /* fuse_xfs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fuse_xfs.c; sourceTree = "<group>"; };
 		FFD708750EE66DA70026C014 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
@@ -35,6 +42,13 @@
 
 /* Begin PBXFrameworksBuildPhase section */
 		8DD76FAD0486AB0100D96B5E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E00161601370EBB700824672 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -57,6 +71,9 @@
 		08FB7795FE84155DC02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				E001616E1370EC7A00824672 /* xfsutil.h */,
+				E001616B1370EC6400824672 /* xfsutil.c */,
+				E00161671370EC4200824672 /* cli.c */,
 				E009D431135977C700D50443 /* fuse-xfs.h */,
 				FFD708640EE669A60026C014 /* fuse_xfs.c */,
 				FFD708750EE66DA70026C014 /* main.c */,
@@ -68,6 +85,7 @@
 			isa = PBXGroup;
 			children = (
 				8DD76FB20486AB0100D96B5E /* fuse-xfs */,
+				E00161621370EBB700824672 /* xfs-cli */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -101,6 +119,22 @@
 			productReference = 8DD76FB20486AB0100D96B5E /* fuse-xfs */;
 			productType = "com.apple.product-type.tool";
 		};
+		E00161611370EBB700824672 /* xfs-cli */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E00161661370EBD600824672 /* Build configuration list for PBXNativeTarget "xfs-cli" */;
+			buildPhases = (
+				E001615F1370EBB700824672 /* Sources */,
+				E00161601370EBB700824672 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "xfs-cli";
+			productName = "xfs-cli";
+			productReference = E00161621370EBB700824672 /* xfs-cli */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -114,6 +148,7 @@
 			projectRoot = "";
 			targets = (
 				8DD76FA90486AB0100D96B5E /* fuse-xfs */,
+				E00161611370EBB700824672 /* xfs-cli */,
 			);
 		};
 /* End PBXProject section */
@@ -125,6 +160,16 @@
 			files = (
 				FFD708650EE669A60026C014 /* fuse_xfs.c in Sources */,
 				FFD708760EE66DA70026C014 /* main.c in Sources */,
+				E001616D1370EC6400824672 /* xfsutil.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E001615F1370EBB700824672 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E00161681370EC4200824672 /* cli.c in Sources */,
+				E001616C1370EC6400824672 /* xfsutil.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -160,7 +205,11 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
-				HEADER_SEARCH_PATHS = /usr/local/include;
+				HEADER_SEARCH_PATHS = (
+					xfsprogs/include,
+					xfsutil,
+					/usr/local/include,
+				);
 				INSTALL_PATH = /usr/local/bin;
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				OTHER_CFLAGS = (
@@ -200,6 +249,41 @@
 			};
 			name = Release;
 		};
+		E00161641370EBB800824672 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/bin;
+				PREBINDING = NO;
+				PRODUCT_NAME = "xfs-cli";
+			};
+			name = Debug;
+		};
+		E00161651370EBB800824672 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				HEADER_SEARCH_PATHS = (
+					/usr/local/include,
+					xfsprogs/include,
+					xfsutil,
+				);
+				INSTALL_PATH = /usr/local/bin;
+				PREBINDING = NO;
+				PRODUCT_NAME = "xfs-cli";
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -217,6 +301,15 @@
 			buildConfigurations = (
 				1DEB928A08733DD80010E9CD /* Debug */,
 				1DEB928B08733DD80010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E00161661370EBD600824672 /* Build configuration list for PBXNativeTarget "xfs-cli" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E00161641370EBB800824672 /* Debug */,
+				E00161651370EBB800824672 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

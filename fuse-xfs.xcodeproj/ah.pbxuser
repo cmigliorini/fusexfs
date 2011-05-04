@@ -9,6 +9,7 @@
 		codeSenseManager = E009D42C1359729400D50443 /* Code sense */;
 		executables = (
 			E009D4221359729100D50443 /* fuse-xfs */,
+			E00161631370EBB700824672 /* xfs-cli */,
 		);
 		perUserDictionary = {
 			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
@@ -16,9 +17,9 @@
 				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
 				PBXFileTableDataSourceColumnWidthsKey = (
 					20,
-					341,
+					833,
 					20,
-					48.16259765625,
+					48,
 					43,
 					43,
 					20,
@@ -33,13 +34,36 @@
 					PBXFileDataSource_Target_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 324631597;
-			PBXWorkspaceStateSaveDate = 324631597;
+			PBXConfiguration.PBXTargetDataSource.PBXTargetDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					793,
+					60,
+					20,
+					48,
+					43,
+					43,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXTargetDataSource_PrimaryAttribute,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+				);
+			};
+			PBXPerProjectTemplateStateSaveDate = 326167120;
+			PBXWorkspaceStateSaveDate = 326167120;
 		};
 		perUserProjectItems = {
 			E009D4341359786E00D50443 = E009D4341359786E00D50443 /* PBXTextBookmark */;
-			E009D4351359786E00D50443 = E009D4351359786E00D50443 /* PBXTextBookmark */;
-			E009D4361359786E00D50443 = E009D4361359786E00D50443 /* PBXTextBookmark */;
+			E009D43F135A299000D50443 = E009D43F135A299000D50443 /* PBXTextBookmark */;
+			E02E18751370E1E900471CA2 = E02E18751370E1E900471CA2 /* PBXTextBookmark */;
+			E02E18761370E1E900471CA2 = E02E18761370E1E900471CA2 /* PBXTextBookmark */;
 		};
 		sourceControlManager = E009D42B1359729400D50443 /* Source Control */;
 		userBuildSettings = {
@@ -49,6 +73,39 @@
 		activeExec = 0;
 		executables = (
 			E009D4221359729100D50443 /* fuse-xfs */,
+		);
+	};
+	E00161611370EBB700824672 /* xfs-cli */ = {
+		activeExec = 0;
+		executables = (
+			E00161631370EBB700824672 /* xfs-cli */,
+		);
+	};
+	E00161631370EBB700824672 /* xfs-cli */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 0;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		dataTipCustomDataFormattersEnabled = 1;
+		dataTipShowTypeColumn = 1;
+		dataTipSortType = 0;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = "xfs-cli";
+		showTypeColumn = 0;
+		sourceDirectories = (
 		);
 	};
 	E009D4221359729100D50443 /* fuse-xfs */ = {
@@ -109,17 +166,7 @@
 		vrLen = 495;
 		vrLoc = 0;
 	};
-	E009D4351359786E00D50443 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = E009D431135977C700D50443 /* fuse-xfs.h */;
-		name = "fuse-xfs.h: 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 134;
-		vrLoc = 0;
-	};
-	E009D4361359786E00D50443 /* PBXTextBookmark */ = {
+	E009D43F135A299000D50443 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = E009D431135977C700D50443 /* fuse-xfs.h */;
 		name = "fuse-xfs.h: 9";
@@ -129,11 +176,31 @@
 		vrLen = 160;
 		vrLoc = 0;
 	};
+	E02E18751370E1E900471CA2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = FFD708640EE669A60026C014 /* fuse_xfs.c */;
+		name = "fuse_xfs.c: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 578;
+		vrLoc = 557;
+	};
+	E02E18761370E1E900471CA2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = FFD708640EE669A60026C014 /* fuse_xfs.c */;
+		name = "fuse_xfs.c: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 755;
+		vrLoc = 0;
+	};
 	FFD708640EE669A60026C014 /* fuse_xfs.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {691, 2834}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1011, 2899}}";
 			sepNavSelRange = "{0, 0}";
-			sepNavVisRange = "{3580, 1415}";
+			sepNavVisRange = "{0, 737}";
 			sepNavWindowFrame = "{{15, 4}, {750, 774}}";
 		};
 	};

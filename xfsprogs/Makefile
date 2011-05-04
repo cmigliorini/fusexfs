@@ -42,7 +42,7 @@ LDIRT += $(SRCTAR)
 endif
 
 LIB_SUBDIRS = libxfs libxlog libxcmd libhandle libdisk
-TOOL_SUBDIRS = copy db estimate fsck fsr growfs io logprint mkfs quota \
+TOOL_SUBDIRS = copy db estimate fsck growfs logprint mkfs quota \
 		mdrestore repair rtcp m4 man doc po debian
 
 SUBDIRS = include $(LIB_SUBDIRS) $(TOOL_SUBDIRS)
