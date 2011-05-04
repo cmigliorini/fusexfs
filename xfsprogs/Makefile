@@ -1,3 +1,5 @@
+LOCAL_CONFIGURE_OPTIONS=--disable-gettext
+
 #
 # Copyright (c) 2000-2006 Silicon Graphics, Inc.  All Rights Reserved.
 #
