@@ -11,6 +11,8 @@
 		E00161681370EC4200824672 /* cli.c in Sources */ = {isa = PBXBuildFile; fileRef = E00161671370EC4200824672 /* cli.c */; };
 		E001616C1370EC6400824672 /* xfsutil.c in Sources */ = {isa = PBXBuildFile; fileRef = E001616B1370EC6400824672 /* xfsutil.c */; };
 		E001616D1370EC6400824672 /* xfsutil.c in Sources */ = {isa = PBXBuildFile; fileRef = E001616B1370EC6400824672 /* xfsutil.c */; };
+		E00161811371A55A00824672 /* libxfs.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E00161801371A55A00824672 /* libxfs.a */; };
+		E00161821371A55A00824672 /* libxfs.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E00161801371A55A00824672 /* libxfs.a */; };
 		FFD708650EE669A60026C014 /* fuse_xfs.c in Sources */ = {isa = PBXBuildFile; fileRef = FFD708640EE669A60026C014 /* fuse_xfs.c */; };
 		FFD708760EE66DA70026C014 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = FFD708750EE66DA70026C014 /* main.c */; };
 /* End PBXBuildFile section */
@@ -35,6 +37,7 @@
 		E00161671370EC4200824672 /* cli.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = cli.c; path = cli/cli.c; sourceTree = "<group>"; };
 		E001616B1370EC6400824672 /* xfsutil.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = xfsutil.c; path = xfsutil/xfsutil.c; sourceTree = "<group>"; };
 		E001616E1370EC7A00824672 /* xfsutil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xfsutil.h; path = xfsutil/xfsutil.h; sourceTree = "<group>"; };
+		E00161801371A55A00824672 /* libxfs.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libxfs.a; path = lib/libxfs.a; sourceTree = "<group>"; };
 		E009D431135977C700D50443 /* fuse-xfs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "fuse-xfs.h"; sourceTree = "<group>"; };
 		FFD708640EE669A60026C014 /* fuse_xfs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fuse_xfs.c; sourceTree = "<group>"; };
 		FFD708750EE66DA70026C014 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
@@ -45,6 +48,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E00161811371A55A00824672 /* libxfs.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -52,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E00161821371A55A00824672 /* libxfs.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -61,6 +66,7 @@
 		08FB7794FE84155DC02AAC07 /* fuse-xfs */ = {
 			isa = PBXGroup;
 			children = (
+				E00161801371A55A00824672 /* libxfs.a */,
 				08FB7795FE84155DC02AAC07 /* Source */,
 				C6A0FF2B0290797F04C91782 /* Documentation */,
 				1AB674ADFE9D54B511CA2CBB /* Products */,
@@ -187,7 +193,10 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				HEADER_SEARCH_PATHS = /usr/local/include;
 				INSTALL_PATH = /usr/local/bin;
-				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				LIBRARY_SEARCH_PATHS = (
+					/usr/local/lib,
+					"\"$(SRCROOT)/lib\"",
+				);
 				OTHER_CFLAGS = (
 					"-D_FILE_OFFSET_BITS=64",
 					"-D__DARWIN_64_BIT_INO_T=1",
@@ -211,7 +220,11 @@
 					/usr/local/include,
 				);
 				INSTALL_PATH = /usr/local/bin;
-				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				LIBRARY_SEARCH_PATHS = (
+					lib,
+					/usr/local/lib,
+					"\"$(SRCROOT)/lib\"",
+				);
 				OTHER_CFLAGS = (
 					"-D_FILE_OFFSET_BITS=64",
 					"-D__DARWIN_64_BIT_INO_T=1",
@@ -259,6 +272,10 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_PATH = /usr/local/bin;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/lib\"",
+				);
 				PREBINDING = NO;
 				PRODUCT_NAME = "xfs-cli";
 			};
@@ -278,6 +295,10 @@
 					xfsutil,
 				);
 				INSTALL_PATH = /usr/local/bin;
+				LIBRARY_SEARCH_PATHS = (
+					lib,
+					"\"$(SRCROOT)/lib\"",
+				);
 				PREBINDING = NO;
 				PRODUCT_NAME = "xfs-cli";
 				ZERO_LINK = NO;

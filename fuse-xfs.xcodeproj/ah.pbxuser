@@ -5,6 +5,8 @@
 		activeExecutable = E009D4221359729100D50443 /* fuse-xfs */;
 		activeTarget = 8DD76FA90486AB0100D96B5E /* fuse-xfs */;
 		addToTargets = (
+			8DD76FA90486AB0100D96B5E /* fuse-xfs */,
+			E00161611370EBB700824672 /* xfs-cli */,
 		);
 		codeSenseManager = E009D42C1359729400D50443 /* Code sense */;
 		executables = (
@@ -60,6 +62,9 @@
 			PBXWorkspaceStateSaveDate = 326167120;
 		};
 		perUserProjectItems = {
+			E00161781371A41800824672 /* PBXTextBookmark */ = E00161781371A41800824672 /* PBXTextBookmark */;
+			E00161791371A41800824672 /* PBXBookmark */ = E00161791371A41800824672 /* PBXBookmark */;
+			E001617A1371A41800824672 /* PBXTextBookmark */ = E001617A1371A41800824672 /* PBXTextBookmark */;
 			E009D4341359786E00D50443 = E009D4341359786E00D50443 /* PBXTextBookmark */;
 			E009D43F135A299000D50443 = E009D43F135A299000D50443 /* PBXTextBookmark */;
 			E02E18751370E1E900471CA2 = E02E18751370E1E900471CA2 /* PBXTextBookmark */;
@@ -74,6 +79,13 @@
 		executables = (
 			E009D4221359729100D50443 /* fuse-xfs */,
 		);
+	};
+	C6A0FF2C0290799A04C91782 /* fuse-xfs.1 */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1011, 949}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 1572}";
+		};
 	};
 	E00161611370EBB700824672 /* xfs-cli */ = {
 		activeExec = 0;
@@ -107,6 +119,30 @@
 		showTypeColumn = 0;
 		sourceDirectories = (
 		);
+	};
+	E00161781371A41800824672 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = FFD708640EE669A60026C014 /* fuse_xfs.c */;
+		name = "fuse_xfs.c: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 737;
+		vrLoc = 0;
+	};
+	E00161791371A41800824672 /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = C6A0FF2C0290799A04C91782 /* fuse-xfs.1 */;
+	};
+	E001617A1371A41800824672 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = C6A0FF2C0290799A04C91782 /* fuse-xfs.1 */;
+		name = "fuse-xfs.1: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1572;
+		vrLoc = 0;
 	};
 	E009D4221359729100D50443 /* fuse-xfs */ = {
 		isa = PBXExecutable;
