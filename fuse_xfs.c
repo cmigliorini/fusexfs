@@ -172,7 +172,7 @@ fuse_xfs_removexattr(const char *path, const char *name) {
 
 void *
 fuse_xfs_init(struct fuse_conn_info *conn) {
-  FUSE_ENABLE_XTIMES(conn);
+  //FUSE_ENABLE_XTIMES(conn);
   return NULL;
 }
 
@@ -210,8 +210,9 @@ struct fuse_operations fuse_xfs_operations = {
   .getxattr    = fuse_xfs_getxattr,
   .listxattr   = fuse_xfs_listxattr,
   .removexattr = fuse_xfs_removexattr,
-  .exchange    = fuse_xfs_exchange,
-  .getxtimes   = fuse_xfs_getxtimes,
-  .setattr_x   = fuse_xfs_setattr_x,
-  .fsetattr_x  = fuse_xfs_fsetattr_x,
+  //Not supported:  
+  //.exchange    = fuse_xfs_exchange,
+  //.getxtimes   = fuse_xfs_getxtimes,
+  //.setattr_x   = fuse_xfs_setattr_x,
+  //.fsetattr_x  = fuse_xfs_fsetattr_x,
 };
