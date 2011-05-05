@@ -185,7 +185,8 @@
 		1DEB928608733DD80010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -200,39 +201,37 @@
 				OTHER_CFLAGS = (
 					"-D_FILE_OFFSET_BITS=64",
 					"-D__DARWIN_64_BIT_INO_T=1",
-					"-D__FreeBSD__=10",
+					"-D__FreeBSD__NOTUSED=10",
 					"-DFUSE_USE_VERSION=26",
 				);
 				OTHER_LDFLAGS = "-lfuse_ino64";
 				PRODUCT_NAME = "fuse-xfs";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/xfsprogs/include $(SRCROOT)/xfsutil";
 			};
 			name = Debug;
 		};
 		1DEB928708733DD80010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
-				HEADER_SEARCH_PATHS = (
-					xfsprogs/include,
-					xfsutil,
-					/usr/local/include,
-				);
+				HEADER_SEARCH_PATHS = /usr/local/include;
 				INSTALL_PATH = /usr/local/bin;
 				LIBRARY_SEARCH_PATHS = (
-					lib,
 					/usr/local/lib,
 					"\"$(SRCROOT)/lib\"",
 				);
 				OTHER_CFLAGS = (
 					"-D_FILE_OFFSET_BITS=64",
 					"-D__DARWIN_64_BIT_INO_T=1",
-					"-D__FreeBSD__=10",
+					"-D__FreeBSD__NOTUSED=10",
 					"-DFUSE_USE_VERSION=26",
 				);
 				OTHER_LDFLAGS = "-lfuse_ino64";
 				PRODUCT_NAME = "fuse-xfs";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/xfsprogs/include $(SRCROOT)/xfsutil";
 			};
 			name = Release;
 		};
@@ -247,6 +246,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
 				SDKROOT = macosx10.5;
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/xfsprogs/include $(SRCROOT)/xfsutil";
 			};
 			name = Debug;
 		};
@@ -259,48 +259,48 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
 				SDKROOT = macosx10.5;
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/xfsprogs/include $(SRCROOT)/xfsutil";
 			};
 			name = Release;
 		};
 		E00161641370EBB800824672 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_VERSION = 4.2;
+				HEADER_SEARCH_PATHS = /usr/local/include;
 				INSTALL_PATH = /usr/local/bin;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/lib\"",
-				);
+				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/lib\"";
+				OTHER_LDFLAGS = "-lreadline";
 				PREBINDING = NO;
 				PRODUCT_NAME = "xfs-cli";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/xfsprogs/include $(SRCROOT)/xfsutil";
 			};
 			name = Debug;
 		};
 		E00161651370EBB800824672 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_MODEL_TUNING = G5;
-				HEADER_SEARCH_PATHS = (
-					/usr/local/include,
-					xfsprogs/include,
-					xfsutil,
-				);
+				GCC_VERSION = 4.2;
+				HEADER_SEARCH_PATHS = /usr/local/include;
 				INSTALL_PATH = /usr/local/bin;
-				LIBRARY_SEARCH_PATHS = (
-					lib,
-					"\"$(SRCROOT)/lib\"",
-				);
+				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/lib\"";
+				OTHER_LDFLAGS = "-lreadline";
 				PREBINDING = NO;
 				PRODUCT_NAME = "xfs-cli";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/xfsprogs/include $(SRCROOT)/xfsutil";
 				ZERO_LINK = NO;
 			};
 			name = Release;
