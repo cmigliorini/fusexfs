@@ -1,3 +1,4 @@
+#include <xfsutil.h>
 #include <xfs/libxfs.h>
 #include <sys/dirent.h>
 #include <sys/stat.h>
@@ -648,7 +649,7 @@ int copy_extent_to_buffer(xfs_mount_t *mp, xfs_bmbt_irec_t rec, void *buffer, of
     
     xfs_off_t block_start;
     xfs_daddr_t block_size = XFS_FSB_TO_B(mp, 1);
-    xfs_daddr_t extent_size = XFS_FSB_TO_B(mp, rec.br_blockcount);
+    //xfs_daddr_t extent_size = XFS_FSB_TO_B(mp, rec.br_blockcount);
     xfs_daddr_t extent_start = XFS_FSB_TO_B(mp, rec.br_startoff);
 
     /* compute a block to start reading from */
@@ -747,7 +748,6 @@ int xfs_readfile_btree(xfs_inode_t *ip, void *buffer, off_t offset, size_t len, 
     xfs_fsize_t size = ip->i_d.di_size;
     
     int error;
-    int block;
 
     if (offset >= size) return 0;
     
