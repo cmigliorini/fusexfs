@@ -137,14 +137,21 @@ int main(int argc, char *argv[]) {
     xfs_inode_t *inode = NULL;
     xfs_off_t ofs;
     struct filldir_data filldata;
-    char *progname = argv[0];
-    char *source_name = argv[1];
+    char *progname;
+    char *source_name;
     int r, fd;
     char *line;
     char path[FILENAME_MAX] = "/";
     char newpath[FILENAME_MAX] = "/";
     char *buffer[BUFSIZE];
     off_t offset;
+
+    if (argc != 2) {
+        printf("Usage: xfs-cli raw_device\n");
+        return 1;
+    }
+    progname = argv[0];
+    source_name = argv[1];
     
     mp = mount_xfs(progname, source_name);
     
