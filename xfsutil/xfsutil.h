@@ -16,8 +16,8 @@ int xfs_is_dir(xfs_inode_t *inode);
 int xfs_is_link(xfs_inode_t *inode);
 int xfs_is_regular(xfs_inode_t *inode);
 
-int find_path(xfs_mount_t *mp, char *path, xfs_inode_t **result);
+int find_path(xfs_mount_t *mp, const char *path, xfs_inode_t **result);
 xfs_mount_t *mount_xfs(char *progname, char *source_name);
 
-struct xfs_name first_name(char *path);
+struct xfs_name first_name(const char *path);
 struct xfs_name next_name(struct xfs_name current);

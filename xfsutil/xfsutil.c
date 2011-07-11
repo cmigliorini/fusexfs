@@ -815,7 +815,7 @@ struct xfs_name next_name(struct xfs_name current) {
     return name;
 }
 
-struct xfs_name first_name(char *path) {
+struct xfs_name first_name(const char *path) {
     struct xfs_name name;
     
     if (!path) {
@@ -829,7 +829,7 @@ struct xfs_name first_name(char *path) {
     return next_name(name);
 }
 
-int find_path(xfs_mount_t *mp, char *path, xfs_inode_t **result) {
+int find_path(xfs_mount_t *mp, const char *path, xfs_inode_t **result) {
     xfs_inode_t *current;
     xfs_ino_t inode;
     struct xfs_name xname;

@@ -119,6 +119,7 @@ int main(int argc, char *argv[]) {
 
     if (argc != 3) {
         printf("Usage: xfs-rcopy raw_device directory\n");
+        printf("Copies the named directory from an XFS file system to the current directory\n");
         return 1;
     }
     progname = argv[0];
