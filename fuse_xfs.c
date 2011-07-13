@@ -13,6 +13,12 @@
 #include <sys/stat.h>
 #include <xfsutil.h>
 
+#ifdef DEBUG
+#define log_debug printf
+#else
+#define log_debug(...)
+#endif
+
 xfs_mount_t *fuse_xfs_mp = NULL;
 
 xfs_mount_t *current_xfs_mount() {
@@ -22,18 +28,27 @@ xfs_mount_t *current_xfs_mount() {
 static int
 fuse_xfs_fgetattr(const char *path, struct stat *stbuf,
                   struct fuse_file_info *fi) {
-    memset(stbuf, 0, sizeof(struct stat));
+    log_debug("fgetattr %s\n", path);
     
-    if (strcmp(path, "/") == 0) { /* The root directory of our file system. */
-        stbuf->st_mode = S_IFDIR | 0755;
-        stbuf->st_nlink = 3;
-        return 0;
+    int r;
+    xfs_inode_t *inode=NULL;
+    
+    r = find_path(current_xfs_mount(), path, &inode);
+    if (r) {
+        return -ENOENT;
     }
-    return -ENOENT;
+    xfs_stat(inode, stbuf);
+
+    if (xfs_is_dir(inode)) {
+        log_debug("directory %s\n", path);
+    }
+    
+    return 0;
 }
 
 static int
 fuse_xfs_getattr(const char *path, struct stat *stbuf) {
+    log_debug("getattr %s\n", path);
     return fuse_xfs_fgetattr(path, stbuf, NULL);
 }
 
@@ -63,6 +78,7 @@ int fuse_xfs_filldir(void *filler_info, const char *name, int namelen, off_t off
     if (!xfs_stat(inode, &stbuf)) {
         stats = &stbuf;
     }
+    log_debug("Direntry %s\n", dir_entry);
     r = filler_data->filler(filler_data->buf, dir_entry, stats, 0);
     libxfs_iput(inode, 0);
     return r;
@@ -71,6 +87,7 @@ int fuse_xfs_filldir(void *filler_info, const char *name, int namelen, off_t off
 static int
 fuse_xfs_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
                  off_t offset, struct fuse_file_info *fi) {
+    log_debug("readdir %s\n", path);
     int r;
     struct filler_info_struct filler_info;
     xfs_inode_t *inode=NULL;
@@ -140,18 +157,34 @@ fuse_xfs_create(const char *path, mode_t mode, struct fuse_file_info *fi) {
 
 static int
 fuse_xfs_open(const char *path, struct fuse_file_info *fi) {
-    return -ENOENT;
+    int r;
+    xfs_inode_t *inode=NULL;
+    
+    log_debug("open %s\n", path); 
+    
+    r = find_path(current_xfs_mount(), path, &inode);
+    if (r) {
+        return -ENOENT;
+    }
+    
+    fi->fh = (uint64_t)inode;
+    //libxfs_iput(inode, 0);
+    return 0;
 }
 
 static int
 fuse_xfs_read(const char *path, char *buf, size_t size, off_t offset,
               struct fuse_file_info *fi) {
-    return -ENOSYS;
+    int r;
+    log_debug("read %s\n", path); 
+    r = xfs_readfile((xfs_inode_t *)fi->fh, buf, offset, size, NULL);
+    return r;
 }
 
 static int
 fuse_xfs_write(const char *path, const char *buf, size_t size,
                off_t offset, struct fuse_file_info *fi) {
+    log_debug("write %s\n", path); 
     return -ENOSYS;
 }
 
@@ -165,10 +198,19 @@ fuse_xfs_statfs(const char *path, struct statvfs *stbuf) {
     stbuf->f_blocks =  mount->m_sb.sb_dblocks;
     stbuf->f_bfree =  mount->m_sb.sb_fdblocks;
     stbuf->f_files = mount->m_maxicount;
-    stbuf->f_ffree = mount->m_sb.sb_ifree;
-    stbuf->f_favail = mount->m_sb.sb_ifree;
+    stbuf->f_ffree = mount->m_sb.sb_ifree + mount->m_maxicount - mount->m_sb.sb_icount;
+    stbuf->f_favail = stbuf->f_ffree;
     stbuf->f_namemax = MAXNAMELEN;
     stbuf->f_fsid = *((unsigned long*)mount->m_sb.sb_uuid);
+    log_debug("f_bsize=%ld\n", stbuf->f_bsize);
+    log_debug("f_frsize=%ld\n", stbuf->f_frsize);
+    log_debug("f_blocks=%d\n", stbuf->f_blocks);
+    log_debug("f_bfree=%d\n", stbuf->f_bfree);
+    log_debug("f_files=%d\n", stbuf->f_files);
+    log_debug("f_ffree=%d\n", stbuf->f_ffree);
+    log_debug("f_favail=%d\n", stbuf->f_favail);
+    log_debug("f_namemax=%ld\n", stbuf->f_namemax);
+    log_debug("f_fsid=%ld\n", stbuf->f_fsid);
     return 0;
 }
 
@@ -179,6 +221,13 @@ fuse_xfs_flush(const char *path, struct fuse_file_info *fi) {
 
 static int
 fuse_xfs_release(const char *path, struct fuse_file_info *fi) {
+    log_debug("release %s\n", path); 
+//    r = find_path(current_xfs_mount(), path, &inode);
+//    if (r) {
+//        return -ENOENT;
+//    }
+    
+    libxfs_iput((xfs_inode_t *)fi->fh, 0);
     return 0;
 }
 
@@ -211,15 +260,36 @@ fuse_xfs_removexattr(const char *path, const char *name) {
 void *
 fuse_xfs_init(struct fuse_conn_info *conn) {
     //FUSE_ENABLE_XTIMES(conn);
-    char *source_name = "/Users/ah/xfs.raw";// "/dev/rdisk1s1";
+    //char *source_name = "/Users/ah/xfs.raw";
+    char *source_name = "/dev/rdisk2s2";
     char *progname = "fuse-xfs";
-    fuse_xfs_mp = mount_xfs(progname, source_name);
-    return NULL;
+    fuse_xfs_mp = mount_xfs(progname, source_name);        
+    log_debug("Mounted %s, %p\n", source_name, fuse_xfs_mp);
+    return fuse_xfs_mp;
 }
 
 void
 fuse_xfs_destroy(void *userdata) {
     libxfs_umount(fuse_xfs_mp);
+}
+
+int fuse_xfs_opendir(const char *path, struct fuse_file_info *fi) {
+    int r;
+    xfs_inode_t *inode=NULL;
+    log_debug("opendir %s\n", path); 
+    
+    r = find_path(current_xfs_mount(), path, &inode);
+    if (r) {
+        return -ENOENT;
+    }
+    
+    libxfs_iput(inode, 0);
+    return 0;
+}
+
+int fuse_xfs_releasedir(const char *path, struct fuse_file_info *fi) {
+    log_debug("releasedir %s\n", path); 
+    return 0;
 }
 
 struct fuse_operations fuse_xfs_operations = {
@@ -229,9 +299,9 @@ struct fuse_operations fuse_xfs_operations = {
   .fgetattr    = fuse_xfs_fgetattr,
 /*  .access      = fuse_xfs_access, */
   .readlink    = fuse_xfs_readlink,
-/*  .opendir     = fuse_xfs_opendir, */
+  .opendir     = fuse_xfs_opendir, 
   .readdir     = fuse_xfs_readdir,
-/*  .releasedir  = fuse_xfs_releasedir, */
+  .releasedir  = fuse_xfs_releasedir, 
   .mknod       = fuse_xfs_mknod, 
   .mkdir       = fuse_xfs_mkdir, 
   .symlink     = fuse_xfs_symlink, 
