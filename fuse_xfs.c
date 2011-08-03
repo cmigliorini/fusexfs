@@ -11,6 +11,7 @@
 #include <string.h>
 #include <errno.h>
 #include <sys/stat.h>
+#include <fuse-xfs.h>
 #include <xfsutil.h>
 
 #ifdef DEBUG
@@ -168,7 +169,6 @@ fuse_xfs_open(const char *path, struct fuse_file_info *fi) {
     }
     
     fi->fh = (uint64_t)inode;
-    //libxfs_iput(inode, 0);
     return 0;
 }
 
@@ -222,11 +222,6 @@ fuse_xfs_flush(const char *path, struct fuse_file_info *fi) {
 static int
 fuse_xfs_release(const char *path, struct fuse_file_info *fi) {
     log_debug("release %s\n", path); 
-//    r = find_path(current_xfs_mount(), path, &inode);
-//    if (r) {
-//        return -ENOENT;
-//    }
-    
     libxfs_iput((xfs_inode_t *)fi->fh, 0);
     return 0;
 }
@@ -260,11 +255,12 @@ fuse_xfs_removexattr(const char *path, const char *name) {
 void *
 fuse_xfs_init(struct fuse_conn_info *conn) {
     //FUSE_ENABLE_XTIMES(conn);
-    //char *source_name = "/Users/ah/xfs.raw";
-    char *source_name = "/dev/rdisk2s2";
-    char *progname = "fuse-xfs";
-    fuse_xfs_mp = mount_xfs(progname, source_name);        
-    log_debug("Mounted %s, %p\n", source_name, fuse_xfs_mp);
+    struct fuse_context *cntx=fuse_get_context();
+    struct fuse_xfs_options *opts = (struct fuse_xfs_options *)cntx->private_data;
+    //char *progname = "fuse-xfs";
+
+    //fuse_xfs_mp = mount_xfs(progname, opts->device);
+    fuse_xfs_mp = opts->xfs_mount;
     return fuse_xfs_mp;
 }
 
