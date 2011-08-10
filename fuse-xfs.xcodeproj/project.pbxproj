@@ -13,6 +13,9 @@
 		E001616D1370EC6400824672 /* xfsutil.c in Sources */ = {isa = PBXBuildFile; fileRef = E001616B1370EC6400824672 /* xfsutil.c */; };
 		E00161811371A55A00824672 /* libxfs.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E00161801371A55A00824672 /* libxfs.a */; };
 		E00161821371A55A00824672 /* libxfs.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E00161801371A55A00824672 /* libxfs.a */; };
+		E0D4250D13CA839A0050663A /* xfsutil.c in Sources */ = {isa = PBXBuildFile; fileRef = E001616B1370EC6400824672 /* xfsutil.c */; };
+		E0D4250F13CA839A0050663A /* libxfs.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E00161801371A55A00824672 /* libxfs.a */; };
+		E0D4251613CA83DE0050663A /* rcopy.c in Sources */ = {isa = PBXBuildFile; fileRef = E0D4251513CA83DE0050663A /* rcopy.c */; };
 		FFD708650EE669A60026C014 /* fuse_xfs.c in Sources */ = {isa = PBXBuildFile; fileRef = FFD708640EE669A60026C014 /* fuse_xfs.c */; };
 		FFD708760EE66DA70026C014 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = FFD708750EE66DA70026C014 /* main.c */; };
 /* End PBXBuildFile section */
@@ -39,6 +42,8 @@
 		E001616E1370EC7A00824672 /* xfsutil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xfsutil.h; path = xfsutil/xfsutil.h; sourceTree = "<group>"; };
 		E00161801371A55A00824672 /* libxfs.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libxfs.a; path = lib/libxfs.a; sourceTree = "<group>"; };
 		E009D431135977C700D50443 /* fuse-xfs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "fuse-xfs.h"; sourceTree = "<group>"; };
+		E0D4251313CA839A0050663A /* xfs-rcopy */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "xfs-rcopy"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E0D4251513CA83DE0050663A /* rcopy.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = rcopy.c; path = cli/rcopy.c; sourceTree = "<group>"; };
 		FFD708640EE669A60026C014 /* fuse_xfs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fuse_xfs.c; sourceTree = "<group>"; };
 		FFD708750EE66DA70026C014 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -60,6 +65,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E0D4250E13CA839A0050663A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E0D4250F13CA839A0050663A /* libxfs.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -77,6 +90,7 @@
 		08FB7795FE84155DC02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				E0D4251513CA83DE0050663A /* rcopy.c */,
 				E001616E1370EC7A00824672 /* xfsutil.h */,
 				E001616B1370EC6400824672 /* xfsutil.c */,
 				E00161671370EC4200824672 /* cli.c */,
@@ -92,6 +106,7 @@
 			children = (
 				8DD76FB20486AB0100D96B5E /* fuse-xfs */,
 				E00161621370EBB700824672 /* xfs-cli */,
+				E0D4251313CA839A0050663A /* xfs-rcopy */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -141,6 +156,22 @@
 			productReference = E00161621370EBB700824672 /* xfs-cli */;
 			productType = "com.apple.product-type.tool";
 		};
+		E0D4250A13CA839A0050663A /* xfs-rcopy */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E0D4251013CA839A0050663A /* Build configuration list for PBXNativeTarget "xfs-rcopy" */;
+			buildPhases = (
+				E0D4250B13CA839A0050663A /* Sources */,
+				E0D4250E13CA839A0050663A /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "xfs-rcopy";
+			productName = "xfs-cli";
+			productReference = E0D4251313CA839A0050663A /* xfs-rcopy */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -148,13 +179,21 @@
 			isa = PBXProject;
 			buildConfigurationList = 1DEB928908733DD80010E9CD /* Build configuration list for PBXProject "fuse-xfs" */;
 			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
 			mainGroup = 08FB7794FE84155DC02AAC07 /* fuse-xfs */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				8DD76FA90486AB0100D96B5E /* fuse-xfs */,
 				E00161611370EBB700824672 /* xfs-cli */,
+				E0D4250A13CA839A0050663A /* xfs-rcopy */,
 			);
 		};
 /* End PBXProject section */
@@ -176,6 +215,15 @@
 			files = (
 				E00161681370EC4200824672 /* cli.c in Sources */,
 				E001616C1370EC6400824672 /* xfsutil.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E0D4250B13CA839A0050663A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E0D4250D13CA839A0050663A /* xfsutil.c in Sources */,
+				E0D4251613CA83DE0050663A /* rcopy.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -267,7 +315,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -288,7 +336,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
@@ -300,6 +348,48 @@
 				OTHER_LDFLAGS = "-lreadline";
 				PREBINDING = NO;
 				PRODUCT_NAME = "xfs-cli";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/xfsprogs/include $(SRCROOT)/xfsutil";
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		E0D4251113CA839A0050663A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_VERSION = 4.2;
+				HEADER_SEARCH_PATHS = /usr/local/include;
+				INSTALL_PATH = /usr/local/bin;
+				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/lib\"";
+				OTHER_LDFLAGS = "-lreadline";
+				PREBINDING = NO;
+				PRODUCT_NAME = "xfs-rcopy";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/xfsprogs/include $(SRCROOT)/xfsutil";
+			};
+			name = Debug;
+		};
+		E0D4251213CA839A0050663A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_VERSION = 4.2;
+				HEADER_SEARCH_PATHS = /usr/local/include;
+				INSTALL_PATH = /usr/local/bin;
+				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/lib\"";
+				OTHER_LDFLAGS = "-lreadline";
+				PREBINDING = NO;
+				PRODUCT_NAME = "xfs-rcopy";
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/xfsprogs/include $(SRCROOT)/xfsutil";
 				ZERO_LINK = NO;
 			};
@@ -331,6 +421,15 @@
 			buildConfigurations = (
 				E00161641370EBB800824672 /* Debug */,
 				E00161651370EBB800824672 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E0D4251013CA839A0050663A /* Build configuration list for PBXNativeTarget "xfs-rcopy" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E0D4251113CA839A0050663A /* Debug */,
+				E0D4251213CA839A0050663A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -17,6 +17,8 @@
 #include <sys/stat.h>
 #include <xfsutil.h>
 
+#define RAW_SECTOR_SIZE 512
+
 extern struct fuse_operations fuse_xfs_operations;
 
 void usage(int argc, char *argv[]) {
@@ -44,6 +46,7 @@ int parse_options(struct fuse_xfs_options* opts, int argc, char *argv[], int *ne
     }
     
     *new_argc = 1;
+    i++;
     for (; i<argc; i++) {
         new_argv[*new_argc] = argv[i];
         (*new_argc)++;
@@ -54,7 +57,7 @@ int parse_options(struct fuse_xfs_options* opts, int argc, char *argv[], int *ne
 
 int xfs_probe(struct fuse_xfs_options* opts) {
     int status, fd;
-    char magic[5];
+    char magic[RAW_SECTOR_SIZE+1];
     struct stat statbuf;
     xfs_mount_t *fuse_xfs_mp;
 
@@ -65,13 +68,15 @@ int xfs_probe(struct fuse_xfs_options* opts) {
     }
     
     fd = open(opts->device, O_RDONLY);
-    if (fd == 0) {
+    if (fd < 0) {
         perror("Failed to open device");
+        fprintf(stderr, "Failed to open %s for reading\n", opts->device);
         return 0;
     }
     
-    status = read(fd, magic, 4);
-    if (status != 4) {
+    status = read(fd, magic, RAW_SECTOR_SIZE);
+    if (status != RAW_SECTOR_SIZE) {
+        perror("Failure reading signature");
         fprintf(stderr, "Failed to read XFS signature on %s\n", opts->device);
         close(fd);
         return 0;
