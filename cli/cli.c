@@ -132,6 +132,14 @@ void goto_parent(char *path) {
     path[pos+1] = '\0';
 }
 
+void strip(char *buffer, char c) {
+    int ptr = strlen(buffer) - 1;
+    while ((ptr >= 0) && (buffer[ptr] == c)) {
+        buffer[ptr] = '\0';
+        ptr--;
+    }
+}
+
 int main(int argc, char *argv[]) {
     xfs_mount_t	*mp;
     xfs_inode_t *inode = NULL;
@@ -160,6 +168,7 @@ int main(int argc, char *argv[]) {
     
     while (line = fetchline(mp, path)) {
         inode = NULL;
+        strip(line, ' ');
         if (strncmp(line, "cd ", 3) == 0) {
             if (strcmp(line+3, "..") == 0) {
                 goto_parent(path);
