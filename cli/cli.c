@@ -200,7 +200,9 @@ int main(int argc, char *argv[]) {
             strcpy(newpath, path);
             strcat(newpath, line+4);
             r = find_path(mp, newpath, &inode);
-            if ((!r) && (xfs_is_regular(inode))) {
+            if (r)
+                printf("File not found\n");
+            else if (xfs_is_regular(inode))) {
                 //TODO: check if it is a file
                 r = 10;
                 offset = 0;
@@ -211,11 +213,9 @@ int main(int argc, char *argv[]) {
                         offset += r;
                     }
                 }
-            } else {
-                if (r) 
-                    printf("File not found\n");
-                else
-                    printf("Not a regular file\n");
+            } else if (xfs_is_link(inode)) {
+            } else
+                printf("Not a regular file\n");
             }
         }
         else if (strncmp(line, "get ", 4) == 0) {

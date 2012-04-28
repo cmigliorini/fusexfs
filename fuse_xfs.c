@@ -55,7 +55,19 @@ fuse_xfs_getattr(const char *path, struct stat *stbuf) {
 
 static int
 fuse_xfs_readlink(const char *path, char *buf, size_t size) {
-    return -ENOENT;
+    int r;
+    xfs_inode_t *inode=NULL;
+
+    log_debug("readlink %s\n", path); 
+    
+    r = find_path(current_xfs_mount(), path, &inode);
+    if (r) {
+        return -ENOENT;
+    }
+    
+    r = xfs_readlink(inode, buf, offset, size, NULL);
+    libxfs_iput(inode, 0);
+    return r;
 }
 
 struct filler_info_struct {
