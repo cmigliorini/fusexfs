@@ -65,8 +65,11 @@ fuse_xfs_readlink(const char *path, char *buf, size_t size) {
     }
     
     r = xfs_readlink(inode, buf, 0, size, NULL);
+    if (r < 0) {
+        return r;
+    }
     libxfs_iput(inode, 0);
-    return r;
+    return 0;
 }
 
 struct filler_info_struct {
