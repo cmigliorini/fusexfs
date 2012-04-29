@@ -3,14 +3,10 @@
  * fuse-xfs
  *
  * Created by Alexandre Hardy on 4/16/11.
- * Copyright 2011 Nimbula. All rights reserved.
  *
- * Compile on the command line as follows:
- * gcc -o "fuse-xfs" fuse_xfs.c main.c -lfuse
- *     -D_FILE_OFFSET_BITS=64 -D__FreeBSD__=10 -DFUSE_USE_VERSION=26
  */
 #include "fuse.h"
-#include "fuse-xfs.h"
+#include "fuse_xfs.h"
 #include <unistd.h>
 #include <string.h>
 #include <stdio.h>

@@ -3,7 +3,6 @@
  * fuse-xfs
  *
  * Created by Alexandre Hardy on 4/16/11.
- * Copyright 2011 Nimbula. All rights reserved.
  *
  */
 
@@ -11,7 +10,7 @@
 #include <string.h>
 #include <errno.h>
 #include <sys/stat.h>
-#include <fuse-xfs.h>
+#include <fuse_xfs.h>
 #include <xfsutil.h>
 
 #ifdef DEBUG
