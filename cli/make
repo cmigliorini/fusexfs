@@ -1,2 +1,0 @@
-rm cli
-gcc -g -o cli -I../include -I. cli.c xfsutil.c ../libxfs/.libs/libxfs.a -lreadline

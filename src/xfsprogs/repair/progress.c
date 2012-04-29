@@ -4,6 +4,7 @@
 #include "progress.h"
 #include "err_protos.h"
 #include <signal.h>
+#include <sys/time.h>
 
 #define ONEMINUTE  60
 #define ONEHOUR   (60*ONEMINUTE)
@@ -161,8 +162,7 @@ progress_rpt_thread (void *p)
 	sigset_t sigs_to_catch;
 	struct tm *tmp;
 	time_t now, elapsed;
-	timer_t timerid;
-	struct itimerspec timespec;
+	struct itimerval timespec;
 	char *msgbuf;
 	__uint64_t *donep;
 	__uint64_t sum;
@@ -179,14 +179,11 @@ progress_rpt_thread (void *p)
 	 */
 
 	timespec.it_value.tv_sec = msgp->interval;
-	timespec.it_value.tv_nsec = 0;
+	timespec.it_value.tv_usec = 0;
 	timespec.it_interval.tv_sec = msgp->interval;
-	timespec.it_interval.tv_nsec = 0;
+	timespec.it_interval.tv_usec = 0;
 
-	if (timer_create (CLOCK_REALTIME, NULL, &timerid))
-		do_error(_("progress_rpt: cannot create timer\n"));
-
-	if (timer_settime (timerid, 0, &timespec, NULL))
+	if (setitimer (ITIMER_REAL, &timespec, NULL))
 		do_error(_("progress_rpt: cannot set timer\n"));
 
 	/*
@@ -274,8 +271,13 @@ progress_rpt_thread (void *p)
 		sigwait (&sigs_to_catch, &caught);
 	}
 
-	if (timer_delete (timerid))
-		do_warn(_("cannot delete timer\n"));
+	/* disable the timer by setting the values to 0 */
+	timespec.it_value.tv_sec = 0;
+	timespec.it_value.tv_usec = 0;
+	timespec.it_interval.tv_sec = 0;
+	timespec.it_interval.tv_usec = 0;
+	if (setitimer (ITIMER_REAL, &timespec, NULL))
+		do_warn(_("progress_rpt: cannot un set timer\n"));
 
 	free (msgbuf);
 	return (NULL);

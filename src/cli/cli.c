@@ -24,6 +24,7 @@ void print_int(uint64_t size, int chars) {
 
 int cli_ls_xfs_filldir(void *dirents, const char *name, int namelen, off_t offset, uint64_t inumber, unsigned flags) {
     char dname[256];
+    char symlink[256];
     int r;
     xfs_inode_t *inode=NULL;
     struct stat fstats;
@@ -55,7 +56,15 @@ int cli_ls_xfs_filldir(void *dirents, const char *name, int namelen, off_t offse
     print_int(fstats.st_gid, 6);
     print_int(fstats.st_size, 12);
     
-    printf(" %s\n", dname);
+    printf(" %s", dname);
+    if (xfs_is_link(inode)) {
+        r = xfs_readlink(inode, symlink, 0, 255, NULL);
+        if (r > 0) {
+            symlink[r] = '\0';
+            printf("->%s", symlink);
+        }
+    }
+    printf("\n");
     libxfs_iput(inode, 0);
     return 0;
 }
@@ -132,19 +141,34 @@ void goto_parent(char *path) {
     path[pos+1] = '\0';
 }
 
+void strip(char *buffer, char c) {
+    int ptr = strlen(buffer) - 1;
+    while ((ptr >= 0) && (buffer[ptr] == c)) {
+        buffer[ptr] = '\0';
+        ptr--;
+    }
+}
+
 int main(int argc, char *argv[]) {
     xfs_mount_t	*mp;
     xfs_inode_t *inode = NULL;
     xfs_off_t ofs;
     struct filldir_data filldata;
-    char *progname = argv[0];
-    char *source_name = argv[1];
+    char *progname;
+    char *source_name;
     int r, fd;
     char *line;
     char path[FILENAME_MAX] = "/";
     char newpath[FILENAME_MAX] = "/";
     char *buffer[BUFSIZE];
     off_t offset;
+
+    if (argc != 2) {
+        printf("Usage: xfs-cli raw_device\n");
+        return 1;
+    }
+    progname = argv[0];
+    source_name = argv[1];
     
     mp = mount_xfs(progname, source_name);
     
@@ -153,6 +177,7 @@ int main(int argc, char *argv[]) {
     
     while (line = fetchline(mp, path)) {
         inode = NULL;
+        strip(line, ' ');
         if (strncmp(line, "cd ", 3) == 0) {
             if (strcmp(line+3, "..") == 0) {
                 goto_parent(path);
@@ -193,7 +218,9 @@ int main(int argc, char *argv[]) {
             strcpy(newpath, path);
             strcat(newpath, line+4);
             r = find_path(mp, newpath, &inode);
-            if ((!r) && (xfs_is_regular(inode))) {
+            if (r)
+                printf("File not found\n");
+            else if (xfs_is_regular(inode)) {
                 //TODO: check if it is a file
                 r = 10;
                 offset = 0;
@@ -204,11 +231,18 @@ int main(int argc, char *argv[]) {
                         offset += r;
                     }
                 }
+            } else if (xfs_is_link(inode)) {
+                r = 10;
+                offset = 0;
+                while (r) {
+                    r = xfs_readlink(inode, buffer, offset, BUFSIZE, NULL);
+                    if (r) {
+                        write(1, buffer, r);
+                        offset += r;
+                    }
+                }
             } else {
-                if (r) 
-                    printf("File not found\n");
-                else
-                    printf("Not a regular file\n");
+                printf("Not a regular file\n");
             }
         }
         else if (strncmp(line, "get ", 4) == 0) {

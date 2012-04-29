@@ -1,3 +1,4 @@
+#include <xfsutil.h>
 #include <xfs/libxfs.h>
 #include <sys/dirent.h>
 #include <sys/stat.h>
@@ -648,7 +649,7 @@ int copy_extent_to_buffer(xfs_mount_t *mp, xfs_bmbt_irec_t rec, void *buffer, of
     
     xfs_off_t block_start;
     xfs_daddr_t block_size = XFS_FSB_TO_B(mp, 1);
-    xfs_daddr_t extent_size = XFS_FSB_TO_B(mp, rec.br_blockcount);
+    //xfs_daddr_t extent_size = XFS_FSB_TO_B(mp, rec.br_blockcount);
     xfs_daddr_t extent_start = XFS_FSB_TO_B(mp, rec.br_startoff);
 
     /* compute a block to start reading from */
@@ -740,14 +741,13 @@ int xfs_readfile_extents(xfs_inode_t *ip, void *buffer, off_t offset, size_t len
 int xfs_readfile_btree(xfs_inode_t *ip, void *buffer, off_t offset, size_t len, int *last_extent) {
     xfs_extnum_t nextents;
     xfs_extnum_t extent;
-    xfs_ifork_t *dp = XFS_IFORK_PTR(ip, XFS_DATA_FORK);
+    xfs_ifork_t *dp;
     xfs_bmbt_rec_host_t *ep;
     xfs_bmbt_irec_t rec;
 	xfs_mount_t	*mp = ip->i_mount;		/* filesystem mount point */
     xfs_fsize_t size = ip->i_d.di_size;
     
     int error;
-    int block;
 
     if (offset >= size) return 0;
     
@@ -791,6 +791,39 @@ int xfs_readfile(xfs_inode_t *ip, void *buffer, off_t offset, size_t len, int *l
     return XFS_ERROR(EIO);
 }
 
+int xfs_readlink_extents(xfs_inode_t *ip, void *buffer, off_t offset, size_t len, int *last_extent) {
+    return xfs_readfile_extents(ip, buffer, offset, len, last_extent);
+}
+
+int xfs_readlink_local(xfs_inode_t *ip, void *buffer, off_t offset, size_t len, int *last_extent) {
+    xfs_ifork_t *dp;
+    xfs_fsize_t size = ip->i_d.di_size;
+    dp = XFS_IFORK_PTR(ip, XFS_DATA_FORK);
+
+    if (size - offset <= 0)
+        return 0;
+
+    if (size - offset < len)
+        len = size - offset;
+
+    memcpy(buffer, dp->if_u1.if_data + offset, len);
+    return len;
+}
+
+int xfs_readlink(xfs_inode_t *ip, void *buffer, off_t offset, size_t len, int *last_extent) {
+    memset(buffer, 0, len);
+
+    if (!(ip->i_d.di_mode & S_IFLNK))
+		return XFS_ERROR(EINVAL);
+    if (XFS_IFORK_FORMAT(ip, XFS_DATA_FORK) == XFS_DINODE_FMT_EXTENTS) {
+        return xfs_readlink_extents(ip, buffer, offset, len, last_extent);
+    } else if (XFS_IFORK_FORMAT(ip, XFS_DATA_FORK) == XFS_DINODE_FMT_LOCAL) {
+        return xfs_readlink_local(ip, buffer, offset, len, last_extent);
+    }
+    
+    return XFS_ERROR(EIO);
+}
+
 struct xfs_name next_name(struct xfs_name current) {
     struct xfs_name name;
     int len = 0;
@@ -815,7 +848,7 @@ struct xfs_name next_name(struct xfs_name current) {
     return name;
 }
 
-struct xfs_name first_name(char *path) {
+struct xfs_name first_name(const char *path) {
     struct xfs_name name;
     
     if (!path) {
@@ -829,7 +862,7 @@ struct xfs_name first_name(char *path) {
     return next_name(name);
 }
 
-int find_path(xfs_mount_t *mp, char *path, xfs_inode_t **result) {
+int find_path(xfs_mount_t *mp, const char *path, xfs_inode_t **result) {
     xfs_inode_t *current;
     xfs_ino_t inode;
     struct xfs_name xname;
@@ -872,10 +905,14 @@ int xfs_stat(xfs_inode_t *inode, struct stat *stats) {
     stats->st_uid = inode->i_d.di_uid;
     stats->st_gid = inode->i_d.di_gid;
     stats->st_rdev = 0;
-    //stats->st_atimespec = inode->i_d.di_atime;
-    //stats->st_mtimespec = inode->i_d.di_mtime;
-    //stats->st_ctimespec = inode->i_d.di_ctime;
-    //stats->st_birthtimespec = inode->i_d.di_ctime; 
+    stats->st_atimespec.tv_sec = inode->i_d.di_atime.t_sec;
+    stats->st_atimespec.tv_nsec = inode->i_d.di_atime.t_nsec;
+    stats->st_mtimespec.tv_sec = inode->i_d.di_mtime.t_sec;
+    stats->st_mtimespec.tv_nsec = inode->i_d.di_mtime.t_nsec;
+    stats->st_ctimespec.tv_sec = inode->i_d.di_ctime.t_sec;
+    stats->st_ctimespec.tv_nsec = inode->i_d.di_ctime.t_nsec;
+    stats->st_birthtimespec.tv_sec = inode->i_d.di_ctime.t_sec; 
+    stats->st_birthtimespec.tv_nsec = inode->i_d.di_ctime.t_nsec; 
     stats->st_size = inode->i_d.di_size;
     stats->st_blocks = inode->i_d.di_nblocks;
     stats->st_blksize = 4096;

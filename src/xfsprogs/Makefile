@@ -1,3 +1,5 @@
+FUSE_XFS_CONFIGURE_OPTIONS = --disable-gettext
+
 #
 # Copyright (c) 2000-2006 Silicon Graphics, Inc.  All Rights Reserved.
 #
@@ -39,9 +41,9 @@ LDIRDIRT = $(SRCDIR)
 LDIRT += $(SRCTAR)
 endif
 
-LIB_SUBDIRS = libxfs libxlog libxcmd libhandle libdisk
-TOOL_SUBDIRS = copy db estimate fsck fsr growfs io logprint mkfs quota \
-		mdrestore repair rtcp m4 man doc po debian
+LIB_SUBDIRS = libxfs libxlog libxcmd libdisk
+TOOL_SUBDIRS = copy db fsck growfs logprint mkfs quota \
+		mdrestore repair rtcp m4 man doc 
 
 SUBDIRS = include $(LIB_SUBDIRS) $(TOOL_SUBDIRS)
 
@@ -85,7 +87,7 @@ configure:
 	autoconf
 
 include/builddefs: configure
-	./configure $$LOCAL_CONFIGURE_OPTIONS
+	./configure $$LOCAL_CONFIGURE_OPTIONS $(FUSE_XFS_CONFIGURE_OPTIONS)
 
 include/platform_defs.h: include/builddefs
 ## Recover from the removal of $@
