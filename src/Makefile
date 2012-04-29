@@ -18,6 +18,12 @@ $(OBJECTS):
 
 $(LIBS)/libxfs.a: $(LIBS)
 	$(MAKE) -C xfsprogs
+	for LIB in libdisk libxcmd libxlog libxfs; do
+		ln -sf $(SRC)/xfsprogs/$LIB/.libs/$LIB.0.dylib $(LIBS)/
+		ln -sf $(SRC)/xfsprogs/$LIB/.libs/$LIB.a $(LIBS)/
+		ln -sf $(SRC)/xfsprogs/$LIB/.libs/$LIB.la $(LIBS)/
+		ln -sf $(SRC)/xfsprogs/$LIB/.libs/$LIB.dylib $(LIBS)/
+	done
 
 $(OBJECTS)/xfsutil.o: $(OBJECTS)
 	$(MAKE) -C xfsutil
