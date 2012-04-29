@@ -24,6 +24,7 @@ void print_int(uint64_t size, int chars) {
 
 int cli_ls_xfs_filldir(void *dirents, const char *name, int namelen, off_t offset, uint64_t inumber, unsigned flags) {
     char dname[256];
+    char symlink[256];
     int r;
     xfs_inode_t *inode=NULL;
     struct stat fstats;
@@ -55,7 +56,15 @@ int cli_ls_xfs_filldir(void *dirents, const char *name, int namelen, off_t offse
     print_int(fstats.st_gid, 6);
     print_int(fstats.st_size, 12);
     
-    printf(" %s\n", dname);
+    printf(" %s", dname);
+    if (xfs_is_link(inode)) {
+        r = xfs_readlink(inode, symlink, 0, 255, NULL);
+        if (r > 0) {
+            symlink[r] = '\0';
+            printf("->%s", symlink);
+        }
+    }
+    printf("\n");
     libxfs_iput(inode, 0);
     return 0;
 }
@@ -223,6 +232,15 @@ int main(int argc, char *argv[]) {
                     }
                 }
             } else if (xfs_is_link(inode)) {
+                r = 10;
+                offset = 0;
+                while (r) {
+                    r = xfs_readlink(inode, buffer, offset, BUFSIZE, NULL);
+                    if (r) {
+                        write(1, buffer, r);
+                        offset += r;
+                    }
+                }
             } else {
                 printf("Not a regular file\n");
             }
