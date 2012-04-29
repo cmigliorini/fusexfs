@@ -20,10 +20,10 @@ $(LIBS)/libxfs.a: $(LIBS)
 	$(MAKE) -C xfsprogs
 	for LIB in libdisk libxcmd libxlog libxfs; do\
 		echo $$LIB;\
-		ln -sf $(SRC)/xfsprogs/\$$LIB/.libs/$$LIB.0.dylib $(LIBS)/;\
-		ln -sf $(SRC)/xfsprogs/\$$LIB/.libs/$$LIB.a $(LIBS)/;\
-		ln -sf $(SRC)/xfsprogs/\$$LIB/.libs/$$LIB.la $(LIBS)/;\
-		ln -sf $(SRC)/xfsprogs/\$$LIB/.libs/$$LIB.dylib $(LIBS)/;\
+		ln -sf $(PWD)/xfsprogs/$$LIB/.libs/$$LIB.0.dylib $(LIBS)/;\
+		ln -sf $(PWD)/xfsprogs/$$LIB/.libs/$$LIB.a $(LIBS)/;\
+		ln -sf $(PWD)/xfsprogs/$$LIB/.libs/$$LIB.la $(LIBS)/;\
+		ln -sf $(PWD)/xfsprogs/$$LIB/.libs/$$LIB.dylib $(LIBS)/;\
 	done
 
 $(OBJECTS)/xfsutil.o: $(OBJECTS)
