@@ -64,7 +64,7 @@ fuse_xfs_readlink(const char *path, char *buf, size_t size) {
         return -ENOENT;
     }
     
-    r = xfs_readlink(inode, buf, offset, size, NULL);
+    r = xfs_readlink(inode, buf, 0, size, NULL);
     libxfs_iput(inode, 0);
     return r;
 }
