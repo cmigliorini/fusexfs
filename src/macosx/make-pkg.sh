@@ -90,7 +90,7 @@ ${LN_SF} ../System/Library/Filesystems/fuse-xfs.fs/mount_fuse-xfs ${DISTRIBUTION
 ${SED_E} "s/FUSEXFS_VERSION_LITERAL/$FUSEXFS_VERSION/g" < ${MKPKG_FOLDER}/Info.plist.in > ${TMP_FOLDER}/Info.plist
 ${CHOWN_R} root:wheel ${TMP_FOLDER}
 ${SUDO} find ${DISTRIBUTION_FOLDER} -name ".hg" -type d | xargs ${SUDO} rm
-${PKGMANAGER} -build -p ${FUSEXFS_NAME}.pkg \
+${PKGMANAGER} -build -p "${BUILD_FOLDER}/${FUSEXFS_NAME}.pkg" \
 			  -f ${DISTRIBUTION_FOLDER} \
 			  -b ./ \
 			  -ds \
@@ -98,13 +98,13 @@ ${PKGMANAGER} -build -p ${FUSEXFS_NAME}.pkg \
 			  -r ${MKPKG_FOLDER}/Install_resources/ \
 			  -i ${TMP_FOLDER}/Info.plist \
 			  -d ${MKPKG_FOLDER}/Description.plist
-${CHOWN_R} root:admin ${FUSEXFS_NAME}.pkg
+${CHOWN_R} root:admin "${BUILD_FOLDER}/${FUSEXFS_NAME}.pkg"
 
 sudo hdiutil create -layout NONE -megabytes 1 -fs HFS+ -volname "${FUSEXFS_NAME}-${FUSEXFS_VERSION}" "${TMP_FOLDER}/${FUSEXFS_NAME}-${FUSEXFS_VERSION}.dmg"
 sudo hdiutil attach -private -nobrowse "${TMP_FOLDER}/${FUSEXFS_NAME}-${FUSEXFS_VERSION}.dmg"
 
 VOLUME_PATH="/Volumes/${FUSEXFS_NAME}-${FUSEXFS_VERSION}"
-sudo cp -pRX ${FUSEXFS_NAME}.pkg "$VOLUME_PATH"
+sudo cp -pRX "${BUILD_FOLDER}/${FUSEXFS_NAME}.pkg" "$VOLUME_PATH"
 
 # Set the custom icon.
 sudo cp -pRX "${MKPKG_FOLDER}/Install_resources/VolumeIcon.icns" "$VOLUME_PATH"/.VolumeIcon.icns
@@ -127,7 +127,7 @@ hdiutil detach "$VOLUME_PATH"
 # Convert to a read-only compressed dmg.
 hdiutil convert -imagekey zlib-level=9 -format UDZO "${TMP_FOLDER}/${FUSEXFS_NAME}-${FUSEXFS_VERSION}.dmg" -o "${BUILD_FOLDER}/${FUSEXFS_NAME}-${FUSEXFS_VERSION}.dmg"
 
-${RM_RF} ${TMP_FOLDER} ${FUSEXFS_NAME}.pkg
+${RM_RF} ${TMP_FOLDER} "${BUILD_FOLDER}/${FUSEXFS_NAME}.pkg"
 
 echo "SUCCESS: All Done."
 exit 0
