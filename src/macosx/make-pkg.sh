@@ -82,13 +82,12 @@ ${INSTALL_C} -m 644 ${SOURCE_FOLDER}/man/fuse-xfs.1 ${DISTRIBUTION_FOLDER}/usr/l
 ${INSTALL_C} -m 644 ${SOURCE_FOLDER}/man/mkfs.xfs.8 ${DISTRIBUTION_FOLDER}/usr/local/share/man/man8/mkfs.xfs.8
 ${INSTALL_C} -m 755 ${MKPKG_FOLDER}/fuse-xfs.fs/fuse-xfs.util ${DISTRIBUTION_FOLDER}/System/Library/Filesystems/fuse-xfs.fs/fuse-xfs.util
 ${INSTALL_C} -m 755 ${MKPKG_FOLDER}/fuse-xfs.fs/mount_fuse-xfs ${DISTRIBUTION_FOLDER}/System/Library/Filesystems/fuse-xfs.fs/mount_fuse-xfs
-${SED_E} "s/FUSEXFS_VERSION_LITERAL/$FUSEXFS_VERSION/g" < ${MKPKG_FOLDER}/fuse-xfs.fs/Contents/Info.plist.in > ${MKPKG_FOLDER}/fuse-xfs.fs/Contents/Info.plist
-${INSTALL_C} -m 644 ${MKPKG_FOLDER}/fuse-xfs.fs/Contents/Info.plist ${DISTRIBUTION_FOLDER}/System/Library/Filesystems/fuse-xfs.fs/Contents/Info.plist
+${SED_E} "s/FUSEXFS_VERSION_LITERAL/$FUSEXFS_VERSION/g" < ${MKPKG_FOLDER}/fuse-xfs.fs/Contents/Info.plist.in > ${TMP_FOLDER}/FSInfo.plist
+${INSTALL_C} -m 644 ${TMP_FOLDER}/FSInfo.plist ${DISTRIBUTION_FOLDER}/System/Library/Filesystems/fuse-xfs.fs/Contents/Info.plist
 ${INSTALL_C} -m 644 ${MKPKG_FOLDER}/fuse-xfs.fs/Contents/PkgInfo ${DISTRIBUTION_FOLDER}/System/Library/Filesystems/fuse-xfs.fs/Contents/PkgInfo
 ${INSTALL_C} -m 644 ${MKPKG_FOLDER}/fuse-xfs.fs/Contents/Resources/English.lproj/InfoPlist.strings ${DISTRIBUTION_FOLDER}/System/Library/Filesystems/fuse-xfs.fs/Contents/Resources/English.lproj/InfoPlist.strings
 ${LN_SF} ../System/Library/Filesystems/fuse-xfs.fs/mount_fuse-xfs ${DISTRIBUTION_FOLDER}/sbin/mount_fuse-xfs
-${SED_E} "s/FUSEXFS_VERSION_LITERAL/$FUSEXFS_VERSION/g" < ${MKPKG_FOLDER}/Info.plist.in > ${MKPKG_FOLDER}/Info.plist
-${MV} ${MKPKG_FOLDER}/Info.plist ${TMP_FOLDER}/Info.plist
+${SED_E} "s/FUSEXFS_VERSION_LITERAL/$FUSEXFS_VERSION/g" < ${MKPKG_FOLDER}/Info.plist.in > ${TMP_FOLDER}/Info.plist
 ${CHOWN_R} root:wheel ${TMP_FOLDER}
 ${SUDO} find ${DISTRIBUTION_FOLDER} -name ".hg" -type d | xargs ${SUDO} rm
 ${PKGMANAGER} -build -p ${FUSEXFS_NAME}.pkg \
