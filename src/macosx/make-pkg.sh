@@ -120,6 +120,7 @@ sudo cp "${MKPKG_FOLDER}/Install_resources/ChangeLog.rtf" "$VOLUME_PATH"/ChangeL
 sudo cp "${MKPKG_FOLDER}/Install_resources/License.rtf" "$VOLUME_PATH"/License.rtf
 
 # Perform some setup
+sleep 3
 osascript add_background.osa "${FUSEXFS_NAME}-${FUSEXFS_VERSION}"
 
 # Detach the volume.
