@@ -2,10 +2,12 @@ TOPLEVEL=..
 
 include Make.inc
 
-PROGRAMS=xfs-cli xfs-rcopy xfs-fuse
+PROGRAMS=xfs-cli xfs-rcopy xfs-fuse mkfs.xfs
 PROGRAMS:=$(addprefix $(BINS)/, $(PROGRAMS))
 
-all: $(PROGRAMS)
+DMG=$(BUILD)/fuse-xfs-$(VERSION).dmg
+
+all: $(PROGRAMS) $(DMG)
 
 $(LIBS):
 	mkdir -p $(LIBS)
@@ -25,6 +27,8 @@ $(LIBS)/libxfs.a: $(LIBS) $(BINS)
 		ln -sf $(PWD)/xfsprogs/$$LIB/.libs/$$LIB.la $(LIBS)/;\
 		ln -sf $(PWD)/xfsprogs/$$LIB/.libs/$$LIB.dylib $(LIBS)/;\
 	done
+
+$(BINS)/mkfs.xfs: $(LIBS)/libxfs.a $(BINS)
 	cp $(PWD)/xfsprogs/mkfs/mkfs.xfs $(BINS)/
 
 $(OBJECTS)/xfsutil.o: $(OBJECTS)
@@ -39,6 +43,9 @@ $(BINS)/xfs-rcopy: $(LIBS)/libxfs.a $(OBJECTS)/xfsutil.o $(BINS)
 $(BINS)/xfs-fuse: $(LIBS)/libxfs.a $(OBJECTS)/xfsutil.o $(BINS)
 	$(MAKE) -C fuse
 
+$(BUILD)/fuse-xfs-$(VERSION).dmg: $(PROGRAMS)
+	$(MAKE) -C macosx
+
 clean:
 	rm -rf $(BINS)/*
 	rm -rf $(LIBS)/*
@@ -47,3 +54,4 @@ clean:
 	$(MAKE) -C fuse clean
 	$(MAKE) -C xfsutil clean
 	$(MAKE) -C xfsprogs clean
+	$(MAKE) -C macosx clean

@@ -62,6 +62,7 @@ ${MKDIR_P} ${DISTRIBUTION_FOLDER}/usr/local/bin
 ${MKDIR_P} ${DISTRIBUTION_FOLDER}/usr/local/lib
 ${MKDIR_P} ${DISTRIBUTION_FOLDER}/usr/local/lib/pkgconfig
 ${MKDIR_P} ${DISTRIBUTION_FOLDER}/usr/local/share/man/man1/
+${MKDIR_P} ${DISTRIBUTION_FOLDER}/usr/local/share/man/man8/
 ${MKDIR_P} ${DISTRIBUTION_FOLDER}/Library/PreferencePanes
 ${MKDIR_P} ${DISTRIBUTION_FOLDER}/System/Library/Filesystems/fuse-xfs.fs
 ${MKDIR_P} ${DISTRIBUTION_FOLDER}/System/Library/Filesystems/fuse-xfs.fs/Support
@@ -70,6 +71,8 @@ ${MKDIR_P} ${DISTRIBUTION_FOLDER}/System/Library/Filesystems/fuse-xfs.fs/Content
 ${MKDIR_P} ${DISTRIBUTION_FOLDER}/System/Library/Filesystems/fuse-xfs.fs/Contents/Resources/English.lproj
 ${INSTALL_C} -m 755 ${BUILD_FOLDER}/bin/mkfs.xfs ${DISTRIBUTION_FOLDER}/usr/local/bin/mkfs.xfs
 ${INSTALL_C} -m 755 ${BUILD_FOLDER}/bin/fuse-xfs ${DISTRIBUTION_FOLDER}/usr/local/bin/fuse-xfs
+${INSTALL_C} -m 755 ${BUILD_FOLDER}/bin/xfs-cli ${DISTRIBUTION_FOLDER}/usr/local/bin/xfs-cli
+${INSTALL_C} -m 755 ${BUILD_FOLDER}/bin/xfs-rcopy ${DISTRIBUTION_FOLDER}/usr/local/bin/xfs-rcopy
 #${INSTALL_C} -m 755 ${BUILD_FOLDER}/fuse-xfs/fuse-xfs.wait ${DISTRIBUTION_FOLDER}/usr/local/bin/fuse-xfs.wait
 #${INSTALL_C} -m 755 ${BUILD_FOLDER}/fuse-xfs/fuse-xfs.probe ${DISTRIBUTION_FOLDER}/usr/local/bin/fuse-xfs.probe
 #${INSTALL_C} -m 755 ${BUILD_FOLDER}/fuse-xfs/fuse-xfs.install ${DISTRIBUTION_FOLDER}/usr/local/bin/fuse-xfs.install
