@@ -92,7 +92,7 @@ function GetFuseVersion ()
         }
         
         print $total . "\n";
-    EOF
+EOF
 }
 
 # Make sure devices are of the form /dev/disk*
