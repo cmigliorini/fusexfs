@@ -14,6 +14,8 @@
 .Sh SYNOPSIS             \" Section Header - required - don't modify
 .Nm
 .Op Fl p \" [-abcd]
+.Op Fl l \" [-abcd]
+.Op Fl u \" [-abcd]
 .Ar device
 --
 mountpoint
@@ -30,6 +32,10 @@ Optional flags:
 .It Fl p                 \"-a flag as a list item
 Only probe the device to see if an XFS filesystem is present.
 Returns 0 on success.
+.It Fl l                 \"-a flag as a list item
+Print out the filesystem label and terminate.
+.It Fl u                 \"-a flag as a list item
+Print out the filesystem UUID and terminate.
 .It Fl o                 \"-a flag as a list item
 A list of options recognized by MacFUSE/OSXFUSE
 .El                      \" Ends the list

@@ -16,4 +16,6 @@ struct fuse_xfs_options {
     xfs_mount_t *xfs_mount;
     unsigned char readonly;
     unsigned char probeonly;
+    unsigned char printlabel;
+    unsigned char printuuid;
 };

@@ -39,6 +39,12 @@ int parse_options(struct fuse_xfs_options* opts, int argc, char *argv[], int *ne
         if (!strcmp(argv[i], "-p")) {
             opts->probeonly = 1;
         }
+        if (!strcmp(argv[i], "-l")) {
+            opts->printlabel = 1;
+        }
+        if (!strcmp(argv[i], "-u")) {
+            opts->printuuid = 1;
+        }
     }
     
     *new_argc = 1;
@@ -114,6 +120,18 @@ int main(int argc, char* argv[], char* envp[], char** exec_path) {
     }
     
     if (opts.probeonly) {
+        libxfs_umount(opts.xfs_mount);
+        return 0;
+    }
+
+    if (opts.printlabel) {
+        printf("%s\n", opts.xfs_mount.m_name); 
+        libxfs_umount(opts.xfs_mount);
+        return 0;
+    }
+
+    if (opts.printuuid) {
+        printf("%s\n", opts.xfs_mount.m_sb.sb_uuid); 
         libxfs_umount(opts.xfs_mount);
         return 0;
     }

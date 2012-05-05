@@ -1,3 +1,5 @@
+VERSION=0.1
+
 BUILD=$(TOPLEVEL)/build
 SRC=$(TOPLEVEL)/src
 BINS=$(BUILD)/bin

@@ -5,6 +5,8 @@
 
 #!/bin/sh
 
+set -e
+
 SUDO="sudo"
 SED_E="${SUDO} sed -e"
 MV="${SUDO} mv"
@@ -102,7 +104,7 @@ VOLUME_PATH="/Volumes/${FUSEXFS_NAME}-${FUSEXFS_VERSION}"
 sudo cp -pRX ${FUSEXFS_NAME}.pkg "$VOLUME_PATH"
 
 # Set the custom icon.
-sudo cp -pRX "${MKPKG_FOLDER}/Install_resources/.VolumeIcon.icns" "$VOLUME_PATH"/.VolumeIcon.icns
+sudo cp -pRX "${MKPKG_FOLDER}/Install_resources/VolumeIcon.icns" "$VOLUME_PATH"/.VolumeIcon.icns
 sudo mkdir "$VOLUME_PATH"/.background
 sudo cp -pRX "${MKPKG_FOLDER}/Install_resources/background.png" "$VOLUME_PATH"/.background/background.png
 sudo /Developer/Tools/SetFile -a C "$VOLUME_PATH"
@@ -120,7 +122,7 @@ osascript add_background.osa "${FUSEXFS_NAME}-${FUSEXFS_VERSION}"
 hdiutil detach "$VOLUME_PATH"
 
 # Convert to a read-only compressed dmg.
-hdiutil convert -imagekey zlib-level=9 -format UDZO "${TMP_FOLDER}/${FUSEXFS_NAME}-${FUSEXFS_VERSION}.dmg" -o "${FUSEXFS_NAME}-${FUSEXFS_VERSION}.dmg"
+hdiutil convert -imagekey zlib-level=9 -format UDZO "${TMP_FOLDER}/${FUSEXFS_NAME}-${FUSEXFS_VERSION}.dmg" -o "${BUILD_FOLDER}/${FUSEXFS_NAME}-${FUSEXFS_VERSION}.dmg"
 
 ${RM_RF} ${TMP_FOLDER} ${FUSEXFS_NAME}.pkg
 
