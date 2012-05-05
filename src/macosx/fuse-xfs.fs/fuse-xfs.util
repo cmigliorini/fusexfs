@@ -336,23 +336,7 @@ function ProbeForInit () {
 # a hash of it if it doesn't fit the 128-bit pattern. TODO: Check that theory.
 function PrintUUID () {
     LogDebug "[PrintUUID] Entering function PrintUUID..."
-    # Get the device and further info
-    DEVICE=`GetDevice "$1"`
-    
-    LogDebug "[Probe] Executing \"${PFX}${FUSE_XFS}\" -u \"${DEVICE}\""
-    PROBE_UUID=`"${PFX}${FUSE_XFS}" "-u" "${DEVICE}"`
-    PROBE_RETVAL=$?
-    LogDebug "[Probe]   Return value: ${PROBE_RETVAL}"
-    LogDebug "[Probe]   UUID        : ${PROBE_UUID}"
-    
-    if ( [[ ${PROBE_RETVAL} -eq 0 ]] ); then
-        echo "${PROBE_UUID}"
-        return ${FSUR_RECOGNIZED}             # FSUR_RECOGNIZED, defined in loadable_fs.h
-    else
-        LogDebug "[Probe] PROBE_RETVAL indicated that we can not mount this volume."
-        LogDebug "[Probe] returning FSUR_UNRECOGNIZED"
-        return ${FSUR_UNRECOGNIZED}            # FSUR_UNRECOGNIZED, defined in loadable_fs.h    
-    fi
+    LogDebug "[PrintUUID] PrintUUID not implemented, returning FSUR_INVAL."
     LogDebug "[PrintUUID] Returning from function PrintUUID..."
     return $FSUR_INVAL
 }
