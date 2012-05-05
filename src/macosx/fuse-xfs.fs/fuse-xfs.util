@@ -271,12 +271,6 @@ ${MOUNT_OUTPUT}"
         LogDebug "[Mount] Output from mount operation: ${MOUNT_OUTPUT}"
     fi
     
-    # Wait for volume to appear
-    # TODO: Don't wait forever
-    while ! mount | grep "on ${MOUNTPOINT}" 2>&1; do
-        sleep 1
-    done
-    
     LogDebug "[Mount] Exiting function mount..."
     # Return codes based on whether it succeeded or not
     return $MOUNT_RES
