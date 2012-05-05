@@ -17,8 +17,6 @@ LN_SF="${SUDO} ln -sf"
 INSTALL_C="${SUDO} install -c"
 CHOWN_R="${SUDO} chown -R"
 PKGMANAGER="${SUDO} /Developer/usr/bin/packagemaker"
-TMP_FOLDER="tmp/"
-DISTRIBUTION_FOLDER="${TMP_FOLDER}/Distribution_folder/"
 
 FUSEXFS_NAME="fuse-xfs"
 
@@ -26,6 +24,9 @@ FUSEXFS_VERSION="$1"
 SOURCE_FOLDER="$2"
 BUILD_FOLDER="$3"
 MKPKG_FOLDER="$4"
+
+TMP_FOLDER="$BUILD_FOLDER/tmp"
+DISTRIBUTION_FOLDER="${TMP_FOLDER}/Distribution_folder/"
 
 if [ x"$FUSEXFS_VERSION" = x"" ]
 then

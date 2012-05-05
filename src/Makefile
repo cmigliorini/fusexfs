@@ -2,11 +2,6 @@ TOPLEVEL=..
 
 include Make.inc
 
-PROGRAMS=xfs-cli xfs-rcopy xfs-fuse mkfs.xfs
-PROGRAMS:=$(addprefix $(BINS)/, $(PROGRAMS))
-
-DMG=$(BUILD)/fuse-xfs-$(VERSION).dmg
-
 all: $(PROGRAMS) $(DMG)
 
 $(LIBS):
@@ -40,7 +35,7 @@ $(BINS)/xfs-cli: $(LIBS)/libxfs.a $(OBJECTS)/xfsutil.o $(BINS)
 $(BINS)/xfs-rcopy: $(LIBS)/libxfs.a $(OBJECTS)/xfsutil.o $(BINS)
 	$(MAKE) -C cli xfs-rcopy
 
-$(BINS)/xfs-fuse: $(LIBS)/libxfs.a $(OBJECTS)/xfsutil.o $(BINS)
+$(BINS)/fuse-xfs: $(LIBS)/libxfs.a $(OBJECTS)/xfsutil.o $(BINS)
 	$(MAKE) -C fuse
 
 $(BUILD)/fuse-xfs-$(VERSION).dmg: $(PROGRAMS)

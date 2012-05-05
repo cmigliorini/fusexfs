@@ -12,3 +12,8 @@ FUSE_LDFLAGS=-losxfuse
 FUSE_INCLUDES=-I /usr/local/include/osxfuse
 XFSUTILS_INCLUDES=-I $(SRC)/xfsutil
 XFS_INCLUDES=-I $(SRC)/xfsprogs/include
+
+PROGRAMS=xfs-cli xfs-rcopy fuse-xfs mkfs.xfs
+PROGRAMS:=$(addprefix $(BINS)/, $(PROGRAMS))
+
+DMG=$(BUILD)/fuse-xfs-$(VERSION).dmg
