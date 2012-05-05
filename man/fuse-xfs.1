@@ -13,6 +13,7 @@
 .\" Use .Nm macro to designate other names for the documented program.
 .Sh SYNOPSIS             \" Section Header - required - don't modify
 .Nm
+.Op Fl p \" [-abcd]
 .Ar device
 --
 mountpoint
@@ -26,6 +27,9 @@ on the specified
 .Pp
 Optional flags:
 .Bl -tag -width -indent  \" Differs from above in tag removed 
+.It Fl p                 \"-a flag as a list item
+Only probe the device to see if an XFS filesystem is present.
+Returns 0 on success.
 .It Fl o                 \"-a flag as a list item
 A list of options recognized by MacFUSE/OSXFUSE
 .El                      \" Ends the list
