@@ -6,14 +6,18 @@ on run argv
             set current view of container window to icon view
             set toolbar visible of container window to false
             set statusbar visible of container window to false
-            set the bounds of container window to {400, 100, 885, 430}
+            set the bounds of container window to {400, 100, 1020, 518}
             set theViewOptions to the icon view options of container window
             set arrangement of theViewOptions to not arranged
             set icon size of theViewOptions to 72
-            set background picture of theViewOptions to file ".background:'background.png'"
+            set background picture of theViewOptions to file ".background:background.png"
+            set position of item "fuse-xfs.pkg" of container window to {90, 100}
+            set position of item "README.rtf" of container window to {300, 100}
+            set position of item "Authors.rtf" of container window to {400, 100}
+            set position of item "License.rtf" of container window to {300, 250}
+            set position of item "ChangeLog.rtf" of container window to {400, 250}
             update without registering applications
             delay 5
-            eject
         end tell
     end tell
 end run
