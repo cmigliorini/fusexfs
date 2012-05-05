@@ -25,6 +25,7 @@ $(LIBS)/libxfs.a: $(LIBS)
 		ln -sf $(PWD)/xfsprogs/$$LIB/.libs/$$LIB.la $(LIBS)/;\
 		ln -sf $(PWD)/xfsprogs/$$LIB/.libs/$$LIB.dylib $(LIBS)/;\
 	done
+	cp $(PWD)/xfsprogs/mkfs/mkfs.xfs $(BINS)/
 
 $(OBJECTS)/xfsutil.o: $(OBJECTS)
 	$(MAKE) -C xfsutil
