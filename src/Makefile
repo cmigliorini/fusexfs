@@ -16,7 +16,7 @@ $(BINS):
 $(OBJECTS):
 	mkdir -p $(OBJECTS)
 
-$(LIBS)/libxfs.a: $(LIBS)
+$(LIBS)/libxfs.a: $(LIBS) $(BINS)
 	$(MAKE) -C xfsprogs
 	for LIB in libdisk libxcmd libxlog libxfs; do\
 		echo $$LIB;\
