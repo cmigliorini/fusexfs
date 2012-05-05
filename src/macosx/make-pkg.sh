@@ -128,7 +128,7 @@ hdiutil detach "$VOLUME_PATH"
 # Convert to a read-only compressed dmg.
 hdiutil convert -imagekey zlib-level=9 -format UDZO "${TMP_FOLDER}/${FUSEXFS_NAME}-${FUSEXFS_VERSION}.dmg" -o "${BUILD_FOLDER}/${FUSEXFS_NAME}-${FUSEXFS_VERSION}.dmg"
 
-${RM_RF} ${TMP_FOLDER} "${BUILD_FOLDER}/${FUSEXFS_NAME}.pkg"
+${RM_RF} ${TMP_FOLDER} "${BUILD_FOLDER}/${FUSEXFS_NAME}.pkg" ${BUILD_FOLDER}/Info.plist ${BUILD_FOLDER}/FSInfo.plist
 
 echo "SUCCESS: All Done."
 exit 0
