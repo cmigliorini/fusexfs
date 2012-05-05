@@ -18,8 +18,10 @@
 extern struct fuse_operations fuse_xfs_operations;
 
 void usage(int argc, char *argv[]) {
-    fprintf(stderr, "fuse-xfs device/file [-p] [-- fuse-opts]\n");
+    fprintf(stderr, "fuse-xfs [-p] [-l] [-u] device/file [-- fuse-opts]\n");
     fprintf(stderr, "         [-p]     Only probe if the device contains an XFS filesystem.\n");
+    fprintf(stderr, "         [-l]     Print the label of the XFS filesystem.\n");
+    fprintf(stderr, "         [-u]     Print the UUID of the XFS filesystem.\n");
     fprintf(stderr, "         --       All options after -- are passed on to fuse.\n");
     fprintf(stderr, "                  The mount point must be supplied as the first argument.\n");
 }
@@ -31,20 +33,21 @@ int parse_options(struct fuse_xfs_options* opts, int argc, char *argv[], int *ne
         return 0;
     }
     
-    opts->device = argv[1];
+    opts->device = NULL;
     
     new_argv[0] = argv[0];
         
-    for (i=2; i<argc && strcmp(argv[i], "--"); i++) {
+    for (i=1; i<argc && strcmp(argv[i], "--"); i++) {
         if (!strcmp(argv[i], "-p")) {
             opts->probeonly = 1;
         }
-        if (!strcmp(argv[i], "-l")) {
+        else if (!strcmp(argv[i], "-l")) {
             opts->printlabel = 1;
         }
-        if (!strcmp(argv[i], "-u")) {
+        else if (!strcmp(argv[i], "-u")) {
             opts->printuuid = 1;
         }
+        else opts->device = argv[i];
     }
     
     *new_argc = 1;
@@ -104,8 +107,10 @@ int xfs_probe(struct fuse_xfs_options* opts) {
 
 int main(int argc, char* argv[], char* envp[], char** exec_path) {
     struct fuse_xfs_options opts;
-    char *fuse_argv[20];
+    char *fuse_argv[256];
+    char fsname[20];
     int fuse_argc = argc;
+    int i;
     
     memset(&opts, 0, sizeof(opts));
     
@@ -115,6 +120,12 @@ int main(int argc, char* argv[], char* envp[], char** exec_path) {
         return 1;
     }
     
+    /* All arguments for xfs must precede fuse arguments */
+    if (!opts.device) {
+        usage(argc, argv);
+        return 1;
+    }
+
     if (!xfs_probe(&opts)) {
         return 2;
     }
@@ -125,13 +136,20 @@ int main(int argc, char* argv[], char* envp[], char** exec_path) {
     }
 
     if (opts.printlabel) {
-        printf("%s\n", opts.xfs_mount.m_name); 
+        memcpy(fsname, opts.xfs_mount->m_sb.sb_fname, 12);
+        fsname[12] = '\0';
+        printf("%s\n", fsname);
         libxfs_umount(opts.xfs_mount);
         return 0;
     }
 
     if (opts.printuuid) {
-        printf("%s\n", opts.xfs_mount.m_sb.sb_uuid); 
+        for (i=0; i<16; i++) {
+            printf("%02x", opts.xfs_mount->m_sb.sb_uuid[i]);
+            if ((i==3) || (i==5) || (i==7) || (i==9))
+                printf("-");
+        }
+        printf("\n");
         libxfs_umount(opts.xfs_mount);
         return 0;
     }
