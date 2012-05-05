@@ -200,7 +200,8 @@ function Mount ()
     # Setting both defer_auth and defer_permissions. The option was renamed
     # starting with MacFUSE 1.0.0, and there seems to be no backward
     # compatibility on the options.
-    OPTIONS="auto_xattr,defer_permissions"
+    # OPTIONS="auto_xattr,defer_permissions"
+    OPTIONS="default_permissions,allow_other"
     
     # The local option is only enabled on Leopard. It causes strange
     # behavior for Disk Utility in Tiger.
@@ -249,7 +250,7 @@ function Mount ()
     LogDebug "[Mount] Got plain device \"${DEVICE}\""
     RAWDEVICE=`GetRawDevice "${DEVICE_ARG}"`
     LogDebug "[Mount] Got raw device \"${RAWDEVICE}\""
-    
+   
     LogDebug "[Mount] Invoking:"
     LogDebug "[Mount]   \"${PFX}${FUSE_XFS}\" \"${DEVICE}\" -- \"${MOUNTPOINT}\" \"-o${OPTIONS}\""
     
@@ -257,7 +258,7 @@ function Mount ()
     MOUNT_OUTPUT=`"${PFX}${FUSE_XFS}" "${DEVICE}" -- "${MOUNTPOINT}" "-o${OPTIONS}" 2>&1`
     MOUNT_RES=$?
     LogDebug "[Mount] ${PFX}${FUSE_XFS} returned with retval: ${MOUNT_RES}"
-    
+
     # If anything went wrong, tell the user via GUI.
     if ( [[ ! ${MOUNT_RES} -eq 0 ]] ); then
         FAIL_OUTPUT_MSG="FUSE-XFS could not mount ${DEVICE}
@@ -269,6 +270,12 @@ ${MOUNT_OUTPUT}"
     else
         LogDebug "[Mount] Output from mount operation: ${MOUNT_OUTPUT}"
     fi
+    
+    # Wait for volume to appear
+    # TODO: Don't wait forever
+    while ! mount | grep "on ${MOUNTPOINT}" 2>&1; do
+        sleep 1
+    done
     
     LogDebug "[Mount] Exiting function mount..."
     # Return codes based on whether it succeeded or not
