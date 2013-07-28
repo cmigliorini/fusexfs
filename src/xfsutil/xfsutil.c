@@ -640,7 +640,7 @@ int min(int x, int y) {
     else return y;
 }
 
-int copy_extent_to_buffer(xfs_mount_t *mp, xfs_bmbt_irec_t rec, void *buffer, off_t offset, size_t len) {
+int copy_extent_to_buffer(xfs_mount_t *mp, xfs_bmbt_irec_t *rec, void *buffer, off_t offset, size_t len) {
     xfs_buf_t *block_buffer;
     int64_t copylen, copy_start;
     xfs_daddr_t block, start, end;
@@ -650,7 +650,7 @@ int copy_extent_to_buffer(xfs_mount_t *mp, xfs_bmbt_irec_t rec, void *buffer, of
     xfs_off_t block_start;
     xfs_daddr_t block_size = XFS_FSB_TO_B(mp, 1);
     //xfs_daddr_t extent_size = XFS_FSB_TO_B(mp, rec.br_blockcount);
-    xfs_daddr_t extent_start = XFS_FSB_TO_B(mp, rec.br_startoff);
+    xfs_daddr_t extent_start = XFS_FSB_TO_B(mp, rec->br_startoff);
 
     /* compute a block to start reading from */
     if (offset >= extent_start) {
@@ -661,11 +661,11 @@ int copy_extent_to_buffer(xfs_mount_t *mp, xfs_bmbt_irec_t rec, void *buffer, of
         start = 0;
     }
 
-    end = min(rec.br_blockcount, XFS_B_TO_FSBT(mp, offset + len - extent_start - 1) + 1);
+    end = min(rec->br_blockcount, XFS_B_TO_FSBT(mp, offset + len - extent_start - 1) + 1);
 
     for (block=start; block<end; block++) {
-        block_start = XFS_FSB_TO_B(mp, (rec.br_startoff + block));        
-        block_buffer = libxfs_readbuf(mp->m_dev, XFS_FSB_TO_DADDR(mp, (rec.br_startblock + block)), 
+        block_start = XFS_FSB_TO_B(mp, (rec->br_startoff + block));
+        block_buffer = libxfs_readbuf(mp->m_dev, XFS_FSB_TO_DADDR(mp, (rec->br_startblock + block)),
                                       XFS_FSB_TO_BB(mp, 1), 0);
         if (block_buffer == NULL) {
             printf("Buffer error\n");
@@ -695,9 +695,9 @@ int copy_extent_to_buffer(xfs_mount_t *mp, xfs_bmbt_irec_t rec, void *buffer, of
     return 0;
 }
 
-int extent_overlaps_buffer(xfs_mount_t *mp, xfs_bmbt_irec_t rec, off_t offset, size_t len) {
-    size_t extent_size = XFS_FSB_TO_B(mp, rec.br_blockcount);
-    size_t extent_start = XFS_FSB_TO_B(mp, rec.br_startoff);
+int extent_overlaps_buffer(xfs_mount_t *mp, xfs_bmbt_irec_t *rec, off_t offset, size_t len) {
+    size_t extent_size = XFS_FSB_TO_B(mp, rec->br_blockcount);
+    size_t extent_start = XFS_FSB_TO_B(mp, rec->br_startoff);
     
     /* check that the extent overlaps the intended read area */
     /* First: the offset lies in the extent */
@@ -729,8 +729,8 @@ int xfs_readfile_extents(xfs_inode_t *ip, void *buffer, off_t offset, size_t len
         ep = xfs_iext_get_ext(dp, extent);
         xfs_bmbt_get_all(ep, &rec);
                 
-        if (extent_overlaps_buffer(mp, rec, offset, len)) {
-            error = copy_extent_to_buffer(mp, rec, buffer, offset, len); 
+        if (extent_overlaps_buffer(mp, &rec, offset, len)) {
+            error = copy_extent_to_buffer(mp, &rec, buffer, offset, len); 
             if (error) return error;
         }
     }
@@ -765,8 +765,8 @@ int xfs_readfile_btree(xfs_inode_t *ip, void *buffer, off_t offset, size_t len, 
     for (extent=0; extent<nextents; extent++) {
         ep = xfs_iext_get_ext(dp, extent);
         xfs_bmbt_get_all(ep, &rec);
-        if (extent_overlaps_buffer(mp, rec, offset, len)) {
-            error = copy_extent_to_buffer(mp, rec, buffer, offset, len); 
+        if (extent_overlaps_buffer(mp, &rec, offset, len)) {
+            error = copy_extent_to_buffer(mp, &rec, buffer, offset, len); 
             if (error) return error;
         }
     }
@@ -985,4 +985,133 @@ xfs_mount_t *mount_xfs(char *progname, char *source_name) {
     }
     
     return mp;
+}
+
+int xfs_open(xfs_mount_t *mp, const char *path, xfs_file_handle_t *handle) {
+    int error;
+    xfs_bmbt_rec_host_t *ep;
+
+    error = find_path(mp, path, &handle->inode);
+    if (error) {
+        return error;
+    }
+
+    /* Only support regular files for reading */
+    if (!(handle->inode->i_d.di_mode & S_IFREG))
+		return XFS_ERROR(EINVAL);
+
+    handle->dp = XFS_IFORK_PTR(handle->inode, XFS_DATA_FORK);
+    
+    /* If there are too many extents for the inode, then load the extents from
+       the btree */
+    if (XFS_IFORK_FORMAT(handle->inode, XFS_DATA_FORK) == XFS_DINODE_FMT_BTREE) {
+        if (!(handle->dp->if_flags & XFS_IFEXTENTS) &&
+            (error = xfs_iread_extents(NULL, handle->inode, XFS_DATA_FORK)))
+            return error;
+    }
+
+    handle->number_of_extents = XFS_IFORK_NEXTENTS(handle->inode, XFS_DATA_FORK);
+    handle->size = handle->inode->i_d.di_size;
+    handle->mp = handle->inode->i_mount;
+    handle->current_extent = 0;
+    handle->offset = 0;
+    ep = xfs_iext_get_ext(handle->dp, handle->current_extent);
+    xfs_bmbt_get_all(ep, &handle->extent_record);
+    return 0;
+}
+
+int xfs_close(xfs_file_handle_t *handle) {
+    libxfs_iput(handle->inode, 0);
+    return 0;
+}
+
+int xfs_read_extent(xfs_file_handle_t *handle, void *buffer, off_t offset, size_t len) {
+    xfs_buf_t *block_buffer;
+    xfs_daddr_t block;
+
+    xfs_off_t block_start, block_offset, block_len;
+    xfs_daddr_t block_size = XFS_FSB_TO_B(handle->mp, 1);
+    xfs_daddr_t extent_start = XFS_FSB_TO_B(handle->mp, handle->extent_record.br_startoff);
+
+    /* compute a block to start reading from */
+    if (offset >= extent_start) {
+        block = XFS_B_TO_FSBT(handle->mp, offset - extent_start);
+        block_offset = offset - block * block_size;
+        block_len = block_size - block_offset;
+    } else {
+        block = 0;
+        block_len = block_size;
+        block_offset = 0;
+    }
+
+    while (len > 0) {
+        block_start = XFS_FSB_TO_B(handle->mp, (handle->extent_record.br_startoff + block));
+        block_buffer = libxfs_readbuf(handle->mp->m_dev,
+                                      XFS_FSB_TO_DADDR(handle->mp, 
+                                          (handle->extent_record.br_startblock + block)),
+                                      XFS_FSB_TO_BB(handle->mp, 1), 0);
+        if (block_buffer == NULL) {
+            return XFS_ERROR(EIO);
+        }
+
+        memcpy(buffer, block_buffer->b_addr + block_offset, min(block_len, len));
+        len -= block_size;
+        buffer += block_size;
+        block++;
+        libxfs_putbuf(block_buffer);
+        block_len = block_size;
+        block_offset = 0;
+    }
+}
+
+int xfs_read(xfs_file_handle_t *handle, void *buffer, off_t offset, size_t len) {
+    int r, advance;
+    size_t to_read;
+    xfs_bmbt_rec_host_t *ep;
+    size_t extent_size = XFS_FSB_TO_B(handle->mp, handle->extent_record.br_blockcount);
+    size_t extent_start = XFS_FSB_TO_B(handle->mp, handle->extent_record.br_startoff);
+
+    if (offset != handle->offset) {
+        r = xfs_seek(handle, offset);
+        if (r) return r;
+    }
+
+    while (len && (handle->offset < handle->size)) {
+        to_read = len;
+        advance = 0;
+        if (extent_size + extent_start < handle->offset + len) {
+            to_read = extent_size + extent_start - handle->offset;
+            advance = 1;
+        }
+        xfs_read_extent(handle, buffer, handle->offset, to_read);
+
+        len -= to_read;
+        handle->offset += to_read;
+        buffer = buffer + to_read;
+
+        if ((advance) && (handle->current_extent < handle->number_of_extents - 1)) {
+            handle->current_extent = handle->current_extent + 1;
+            ep = xfs_iext_get_ext(handle->dp, handle->current_extent);
+            xfs_bmbt_get_all(ep, &handle->extent_record);
+        }
+    }
+}
+
+int xfs_seek(xfs_file_handle_t *handle, off_t offset) {
+    xfs_extnum_t extent;
+    xfs_bmbt_rec_host_t *ep;
+
+    for (extent=0; extent < handle->number_of_extents; extent++) {
+        ep = xfs_iext_get_ext(handle->dp, extent);
+        xfs_bmbt_get_all(ep, &handle->extent_record);
+        if (extent_overlaps_buffer(handle->mp, &handle->extent_record, offset, 1)) {
+            handle->current_extent = extent;
+            handle->offset = offset;
+            return 0;
+        }
+    }
+
+    handle->current_extent = extent - 1;
+    handle->offset = offset;
+    return 0;
 }
