@@ -30,8 +30,7 @@ xfs_readdir(
             xfs_off_t	*offset,
             filldir_t	filldir);
 
-int xfs_readfile(xfs_inode_t *ip, void *buffer, off_t offset, size_t len, int *last_extent);
-int xfs_readlink(xfs_inode_t *ip, void *buffer, off_t offset, size_t len, int *last_extent);
+int xfs_readlink(xfs_inode_t *ip, void *buffer, off_t offset, size_t len);
 int xfs_stat(xfs_inode_t *inode, struct stat *stats);
 int xfs_is_dir(xfs_inode_t *inode);
 int xfs_is_link(xfs_inode_t *inode);

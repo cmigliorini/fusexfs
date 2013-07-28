@@ -707,7 +707,7 @@ int extent_overlaps_buffer(xfs_mount_t *mp, xfs_bmbt_irec_t *rec, off_t offset, 
     return 0;
 }
 
-int xfs_readfile_extents(xfs_inode_t *ip, void *buffer, off_t offset, size_t len, int *last_extent) {
+int xfs_readfile_extents(xfs_inode_t *ip, void *buffer, off_t offset, size_t len) {
     xfs_extnum_t nextents;
     xfs_extnum_t extent;
     xfs_bmbt_irec_t rec;
@@ -738,7 +738,7 @@ int xfs_readfile_extents(xfs_inode_t *ip, void *buffer, off_t offset, size_t len
     return len;
 }
 
-int xfs_readfile_btree(xfs_inode_t *ip, void *buffer, off_t offset, size_t len, int *last_extent) {
+int xfs_readfile_btree(xfs_inode_t *ip, void *buffer, off_t offset, size_t len) {
     xfs_extnum_t nextents;
     xfs_extnum_t extent;
     xfs_ifork_t *dp;
@@ -774,7 +774,7 @@ int xfs_readfile_btree(xfs_inode_t *ip, void *buffer, off_t offset, size_t len, 
     return len;
 }
 
-int xfs_readfile(xfs_inode_t *ip, void *buffer, off_t offset, size_t len, int *last_extent) {
+int xfs_readfile(xfs_inode_t *ip, void *buffer, off_t offset, size_t len) {
     /* TODO: make this better: */
     /* Initialise the buffer to 0 to handle gaps in extents */
     
@@ -783,19 +783,19 @@ int xfs_readfile(xfs_inode_t *ip, void *buffer, off_t offset, size_t len, int *l
     if (!(ip->i_d.di_mode & S_IFREG))
 		return XFS_ERROR(EINVAL);
     if (XFS_IFORK_FORMAT(ip, XFS_DATA_FORK) == XFS_DINODE_FMT_EXTENTS) {
-        return xfs_readfile_extents(ip, buffer, offset, len, last_extent);
+        return xfs_readfile_extents(ip, buffer, offset, len);
     } else if (XFS_IFORK_FORMAT(ip, XFS_DATA_FORK) == XFS_DINODE_FMT_BTREE) {
-        return xfs_readfile_btree(ip, buffer, offset, len, last_extent);
+        return xfs_readfile_btree(ip, buffer, offset, len);
     }
     
     return XFS_ERROR(EIO);
 }
 
-int xfs_readlink_extents(xfs_inode_t *ip, void *buffer, off_t offset, size_t len, int *last_extent) {
-    return xfs_readfile_extents(ip, buffer, offset, len, last_extent);
+int xfs_readlink_extents(xfs_inode_t *ip, void *buffer, off_t offset, size_t len) {
+    return xfs_readfile_extents(ip, buffer, offset, len);
 }
 
-int xfs_readlink_local(xfs_inode_t *ip, void *buffer, off_t offset, size_t len, int *last_extent) {
+int xfs_readlink_local(xfs_inode_t *ip, void *buffer, off_t offset, size_t len) {
     xfs_ifork_t *dp;
     xfs_fsize_t size = ip->i_d.di_size;
     dp = XFS_IFORK_PTR(ip, XFS_DATA_FORK);
@@ -810,15 +810,15 @@ int xfs_readlink_local(xfs_inode_t *ip, void *buffer, off_t offset, size_t len, 
     return len;
 }
 
-int xfs_readlink(xfs_inode_t *ip, void *buffer, off_t offset, size_t len, int *last_extent) {
+int xfs_readlink(xfs_inode_t *ip, void *buffer, off_t offset, size_t len) {
     memset(buffer, 0, len);
 
     if (!(ip->i_d.di_mode & S_IFLNK))
 		return XFS_ERROR(EINVAL);
     if (XFS_IFORK_FORMAT(ip, XFS_DATA_FORK) == XFS_DINODE_FMT_EXTENTS) {
-        return xfs_readlink_extents(ip, buffer, offset, len, last_extent);
+        return xfs_readlink_extents(ip, buffer, offset, len);
     } else if (XFS_IFORK_FORMAT(ip, XFS_DATA_FORK) == XFS_DINODE_FMT_LOCAL) {
-        return xfs_readlink_local(ip, buffer, offset, len, last_extent);
+        return xfs_readlink_local(ip, buffer, offset, len);
     }
     
     return XFS_ERROR(EIO);

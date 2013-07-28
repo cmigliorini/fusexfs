@@ -58,7 +58,7 @@ int cli_ls_xfs_filldir(void *dirents, const char *name, int namelen, off_t offse
     
     printf(" %s", dname);
     if (xfs_is_link(inode)) {
-        r = xfs_readlink(inode, symlink, 0, 255, NULL);
+        r = xfs_readlink(inode, symlink, 0, 255);
         if (r > 0) {
             symlink[r] = '\0';
             printf("->%s", symlink);
@@ -225,7 +225,7 @@ int main(int argc, char *argv[]) {
                 r = 10;
                 offset = 0;
                 while (r) {
-                    r = xfs_readfile(inode, buffer, offset, BUFSIZE, NULL);
+                    r = xfs_readfile(inode, buffer, offset, BUFSIZE);
                     if (r) {
                         write(1, buffer, r);
                         offset += r;
@@ -235,7 +235,7 @@ int main(int argc, char *argv[]) {
                 r = 10;
                 offset = 0;
                 while (r) {
-                    r = xfs_readlink(inode, buffer, offset, BUFSIZE, NULL);
+                    r = xfs_readlink(inode, buffer, offset, BUFSIZE);
                     if (r) {
                         write(1, buffer, r);
                         offset += r;
@@ -258,7 +258,7 @@ int main(int argc, char *argv[]) {
                     printf("Failed to open local file\n");
                 } else {
                     while (r) {
-                        r = xfs_readfile(inode, buffer, offset, BUFSIZE, NULL);
+                        r = xfs_readfile(inode, buffer, offset, BUFSIZE);
                         if (r) {
                             write(fd, buffer, r);
                             offset += r;

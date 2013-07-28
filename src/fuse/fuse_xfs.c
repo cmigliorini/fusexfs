@@ -64,7 +64,7 @@ fuse_xfs_readlink(const char *path, char *buf, size_t size) {
         return -ENOENT;
     }
     
-    r = xfs_readlink(inode, buf, 0, size, NULL);
+    r = xfs_readlink(inode, buf, 0, size);
     if (r < 0) {
         return r;
     }
@@ -191,7 +191,7 @@ fuse_xfs_read(const char *path, char *buf, size_t size, off_t offset,
               struct fuse_file_info *fi) {
     int r;
     log_debug("read %s\n", path); 
-    r = xfs_readfile((xfs_inode_t *)fi->fh, buf, offset, size, NULL);
+    r = xfs_readfile((xfs_inode_t *)fi->fh, buf, offset, size);
     return r;
 }
 
