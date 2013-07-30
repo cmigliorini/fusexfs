@@ -173,16 +173,17 @@ fuse_xfs_create(const char *path, mode_t mode, struct fuse_file_info *fi) {
 static int
 fuse_xfs_open(const char *path, struct fuse_file_info *fi) {
     int r;
-    xfs_inode_t *inode=NULL;
+    xfs_file_handle_t *handle = (xfs_file_handle_t *)malloc(sizeof(xfs_file_handle_t));
     
     log_debug("open %s\n", path); 
     
-    r = find_path(current_xfs_mount(), path, &inode);
+    r = xfs_open(current_xfs_mount(), path, handle);
     if (r) {
+        free(handle);
         return -ENOENT;
     }
     
-    fi->fh = (uint64_t)inode;
+    fi->fh = (uint64_t)handle;
     return 0;
 }
 
@@ -191,7 +192,7 @@ fuse_xfs_read(const char *path, char *buf, size_t size, off_t offset,
               struct fuse_file_info *fi) {
     int r;
     log_debug("read %s\n", path); 
-    r = xfs_readfile((xfs_inode_t *)fi->fh, buf, offset, size);
+    r = xfs_read((xfs_file_handle_t *)fi->fh, buf, offset, size);
     return r;
 }
 
@@ -235,8 +236,10 @@ fuse_xfs_flush(const char *path, struct fuse_file_info *fi) {
 
 static int
 fuse_xfs_release(const char *path, struct fuse_file_info *fi) {
-    log_debug("release %s\n", path); 
-    libxfs_iput((xfs_inode_t *)fi->fh, 0);
+    xfs_file_handle_t *handle = (xfs_file_handle_t *)fi->fh;
+    log_debug("release %s\n", path);
+    xfs_close(handle);
+    free(handle);
     return 0;
 }
 

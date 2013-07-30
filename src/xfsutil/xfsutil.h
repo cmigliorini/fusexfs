@@ -43,6 +43,7 @@ struct xfs_name first_name(const char *path);
 struct xfs_name next_name(struct xfs_name current);
 
 int xfs_open(xfs_mount_t *mp, const char *path, xfs_file_handle_t *handle);
+int xfs_open_inode(xfs_mount_t *mp, xfs_inode_t *inode, xfs_file_handle_t *handle);
 int xfs_close(xfs_file_handle_t *handle);
 int xfs_read(xfs_file_handle_t *handle, void *buffer, off_t offset, size_t len);
 int xfs_seek(xfs_file_handle_t *handle, off_t offset);

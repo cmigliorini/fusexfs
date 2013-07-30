@@ -70,6 +70,7 @@ void copy_tree(xfs_mount_t *mp, char *parent, char *local, xfs_inode_t *inode) {
     struct filldir_data filldata;
     char *buffer[BUFSIZE];
     off_t offset;
+    xfs_file_handle_t handle;
 
     if (xfs_is_dir(inode)) {
         mkdir(local, 0770);
@@ -88,13 +89,15 @@ void copy_tree(xfs_mount_t *mp, char *parent, char *local, xfs_inode_t *inode) {
         if (fd < 0) {
             printf("Failed to open local file\n");
         } else {
+            xfs_open_inode(mp, inode, &handle);
             while (r) {
-                r = xfs_readfile(inode, buffer, offset, BUFSIZE, NULL);
+                r = xfs_read(&handle, buffer, offset, BUFSIZE);
                 if (r) {
                     write(fd, buffer, r);
                     offset += r;
                 }
-           }
+            }
+            xfs_close(&handle);
         }
         close(fd);
     }

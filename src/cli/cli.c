@@ -153,6 +153,7 @@ int main(int argc, char *argv[]) {
     xfs_mount_t	*mp;
     xfs_inode_t *inode = NULL;
     xfs_off_t ofs;
+    xfs_file_handle_t handle;
     struct filldir_data filldata;
     char *progname;
     char *source_name;
@@ -224,13 +225,15 @@ int main(int argc, char *argv[]) {
                 //TODO: check if it is a file
                 r = 10;
                 offset = 0;
+                xfs_open(mp, newpath, &handle);
                 while (r) {
-                    r = xfs_readfile(inode, buffer, offset, BUFSIZE);
+                    r = xfs_read(&handle, buffer, offset, BUFSIZE);
                     if (r) {
                         write(1, buffer, r);
                         offset += r;
                     }
                 }
+                xfs_close(&handle);
             } else if (xfs_is_link(inode)) {
                 r = 10;
                 offset = 0;
@@ -257,14 +260,16 @@ int main(int argc, char *argv[]) {
                 if (fd < 0) {
                     printf("Failed to open local file\n");
                 } else {
+                    xfs_open(mp, newpath, &handle);
                     while (r) {
-                        r = xfs_readfile(inode, buffer, offset, BUFSIZE);
+                        r = xfs_read(&handle, buffer, offset, BUFSIZE);
                         if (r) {
                             write(fd, buffer, r);
                             offset += r;
                         }
                     }
                     close(fd);
+                    xfs_close(&handle);
                     printf("Retrieved %lld bytes\n", offset);
                 }
             } else {

@@ -989,12 +989,20 @@ xfs_mount_t *mount_xfs(char *progname, char *source_name) {
 
 int xfs_open(xfs_mount_t *mp, const char *path, xfs_file_handle_t *handle) {
     int error;
-    xfs_bmbt_rec_host_t *ep;
 
     error = find_path(mp, path, &handle->inode);
     if (error) {
         return error;
     }
+
+    return xfs_open_inode(mp, handle->inode, handle);
+}
+
+int xfs_open_inode(xfs_mount_t *mp, xfs_inode_t *inode, xfs_file_handle_t *handle) {
+    int error;
+    xfs_bmbt_rec_host_t *ep;
+
+    handle->inode = inode;
 
     /* Only support regular files for reading */
     if (!(handle->inode->i_d.di_mode & S_IFREG))
@@ -1054,19 +1062,23 @@ int xfs_read_extent(xfs_file_handle_t *handle, void *buffer, off_t offset, size_
             return XFS_ERROR(EIO);
         }
 
-        memcpy(buffer, block_buffer->b_addr + block_offset, min(block_len, len));
-        len -= block_size;
-        buffer += block_size;
+        block_len = min(block_len, len);
+        memcpy(buffer, block_buffer->b_addr + block_offset, block_len);
+        len -= block_len;
+        buffer += block_len;
         block++;
         libxfs_putbuf(block_buffer);
         block_len = block_size;
         block_offset = 0;
     }
+
+    return 0;
 }
 
 int xfs_read(xfs_file_handle_t *handle, void *buffer, off_t offset, size_t len) {
     int r, advance;
     size_t to_read;
+    size_t completed = 0;
     xfs_bmbt_rec_host_t *ep;
     size_t extent_size = XFS_FSB_TO_B(handle->mp, handle->extent_record.br_blockcount);
     size_t extent_start = XFS_FSB_TO_B(handle->mp, handle->extent_record.br_startoff);
@@ -1076,16 +1088,21 @@ int xfs_read(xfs_file_handle_t *handle, void *buffer, off_t offset, size_t len) 
         if (r) return r;
     }
 
-    while (len && (handle->offset < handle->size)) {
+    if (handle->offset + len > handle->size)
+        len = handle->size - handle->offset;
+
+    while (len) {
         to_read = len;
         advance = 0;
         if (extent_size + extent_start < handle->offset + len) {
             to_read = extent_size + extent_start - handle->offset;
             advance = 1;
         }
-        xfs_read_extent(handle, buffer, handle->offset, to_read);
+        r = xfs_read_extent(handle, buffer, handle->offset, to_read);
+        if (r) return r;
 
         len -= to_read;
+        completed += to_read;
         handle->offset += to_read;
         buffer = buffer + to_read;
 
@@ -1095,6 +1112,8 @@ int xfs_read(xfs_file_handle_t *handle, void *buffer, off_t offset, size_t len) 
             xfs_bmbt_get_all(ep, &handle->extent_record);
         }
     }
+
+    return completed;
 }
 
 int xfs_seek(xfs_file_handle_t *handle, off_t offset) {
