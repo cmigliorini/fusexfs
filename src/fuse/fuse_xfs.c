@@ -250,12 +250,12 @@ fuse_xfs_fsync(const char *path, int isdatasync, struct fuse_file_info *fi) {
 
 static int
 fuse_xfs_setxattr(const char *path, const char *name, const char *value,
-                  size_t size, int flags) {
+                  size_t size, int flags, uint32_t a) {
     return -ENOTSUP;
  }
 
 static int
-fuse_xfs_getxattr(const char *path, const char *name, char *value, size_t size) {
+fuse_xfs_getxattr(const char *path, const char *name, char *value, size_t size, uint32_t a) {
     return -ENOATTR;
 }
 
