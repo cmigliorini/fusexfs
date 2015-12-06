@@ -382,7 +382,7 @@ LogDebug "Invoking user: ${INVOKING_USER}"
 EXEC=`GetAbsoluteFile "$0"`
 BUNDLE=`GetBundle "${EXEC}"`
 ROOT=`GetDirName "${BUNDLE}" 4`
-PFX="${ROOT}/usr/local"
+PFX="/usr/local"
 SELF=`basename "${EXEC}"`
 INVOKEBASENAME=`basename "$0"`
 # FUSE=`GetFuseVersion` # Not really needed unless you want to specify noping_diskarb. I don't see a reason to do that.
