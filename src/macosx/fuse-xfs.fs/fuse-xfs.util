@@ -174,7 +174,7 @@ function QuickVerify () {
     
     # In this case, no FSUR value is returned. Instead we must mimic whatever
     # values fsck returns. OS X expects us to do that (I think).
-    return 0
+    return $FSUR_IO_SUCCESS
 }
 
 # Verify a drive (read only fsck)
@@ -302,8 +302,8 @@ function Probe ()
     DEVICE=`GetDevice "$1"`
     
     # We probe for --readonly, and deal with the read only vs. read write situation in Mount ()
-    LogDebug "[Probe] Executing \"${PFX}${FUSE_XFS}\" -p \"${DEVICE}\" 2>&1"
-    PROBE_OUTPUT=`"${PFX}${FUSE_XFS}" "-p" "${DEVICE}" 2>&1`
+    LogDebug "[Probe] Executing \"${PFX}${FUSE_XFS}\" -p \"${DEVICE}\" 2>/dev/null"
+    PROBE_OUTPUT=`"${PFX}${FUSE_XFS}" "-p" "${DEVICE}" 2>/dev/null`
     PROBE_RETVAL=$?
     PROBE_VOLNAME=`"${PFX}${FUSE_XFS}" "-l" "${DEVICE}"`
     LogDebug "[Probe]   Return value: ${PROBE_RETVAL}"
@@ -341,15 +341,15 @@ function PrintUUID () {
     DEVICE=`GetDevice "$1"`
     
     # We probe for --readonly, and deal with the read only vs. read write situation in Mount ()
-    LogDebug "[PrintUUID] Executing \"${PFX}${FUSE_XFS}\" -u \"${DEVICE}\" 2>&1"
-    UUID_OUTPUT=`"${PFX}${FUSE_XFS}" "-u" "${DEVICE}" 2>&1`
+    LogDebug "[PrintUUID] Executing \"${PFX}${FUSE_XFS}\" -u \"${DEVICE}\" 2>/dev/null"
+    UUID_OUTPUT=`"${PFX}${FUSE_XFS}" "-u" "${DEVICE}" 2>/dev/null`
     UUID_RETVAL=$?
     LogDebug "[PrintUUID]   Return value: ${UUID_RETVAL}"
     LogDebug "[PrintUUID]   Output (UUID_OUTPUT): \"${UUID_OUTPUT}\""
     
     if ( [[ ${UUID_RETVAL} -eq 0 ]] ); then
         echo "${UUID_OUTPUT}"
-        return 0
+        return $FSUR_IO_SUCCESS
     else
         LogDebug "[PrintUUID] PrintUUID failed, returning FSUR_INVAL."
         LogDebug "[PrintUUID] Returning from function PrintUUID..."
