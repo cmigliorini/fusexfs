@@ -311,7 +311,7 @@ function Probe ()
     LogDebug "[Probe]   Output (PROBE_OUTPUT): \"${PROBE_OUTPUT}\""
     
     if ( [[ ${PROBE_RETVAL} -eq 0 ]] ); then
-        echo "${PROBE_VOLNAME}"
+        echo "XFS-${PROBE_VOLNAME}"
         return ${FSUR_RECOGNIZED}             # FSUR_RECOGNIZED, defined in loadable_fs.h
     else
         LogDebug "[Probe] PROBE_RETVAL indicated that we can not mount this volume."
@@ -336,10 +336,25 @@ function ProbeForInit () {
 # It's possible that any string can be returned and that OS X just creates
 # a hash of it if it doesn't fit the 128-bit pattern. TODO: Check that theory.
 function PrintUUID () {
+    # Get the device and further info
     LogDebug "[PrintUUID] Entering function PrintUUID..."
-    LogDebug "[PrintUUID] PrintUUID not implemented, returning FSUR_INVAL."
-    LogDebug "[PrintUUID] Returning from function PrintUUID..."
-    return $FSUR_INVAL
+    DEVICE=`GetDevice "$1"`
+    
+    # We probe for --readonly, and deal with the read only vs. read write situation in Mount ()
+    LogDebug "[PrintUUID] Executing \"${PFX}${FUSE_XFS}\" -u \"${DEVICE}\" 2>&1"
+    UUID_OUTPUT=`"${PFX}${FUSE_XFS}" "-u" "${DEVICE}" 2>&1`
+    UUID_RETVAL=$?
+    LogDebug "[PrintUUID]   Return value: ${UUID_RETVAL}"
+    LogDebug "[PrintUUID]   Output (UUID_OUTPUT): \"${UUID_OUTPUT}\""
+    
+    if ( [[ ${UUID_RETVAL} -eq 0 ]] ); then
+        echo "${UUID_OUTPUT}"
+        return 0
+    else
+        LogDebug "[PrintUUID] PrintUUID failed, returning FSUR_INVAL."
+        LogDebug "[PrintUUID] Returning from function PrintUUID..."
+        return $FSUR_INVAL
+    fi
 }
 
 function SetUUID () {
