@@ -55,11 +55,10 @@ fi
 ${RM_RF} ${TMP_FOLDER} *.pkg *.dmg
 ${MKDIR_P} ${TMP_FOLDER}
 ${MKDIR_P} ${DISTRIBUTION_FOLDER}
-${MKDIR_P} ${DISTRIBUTION_FOLDER}/sbin
 ${MKDIR_P} ${DISTRIBUTION_FOLDER}/usr
-${MKDIR_P} ${DISTRIBUTION_FOLDER}/usr/sbin
 ${MKDIR_P} ${DISTRIBUTION_FOLDER}/usr/local
 ${MKDIR_P} ${DISTRIBUTION_FOLDER}/usr/local/bin
+${MKDIR_P} ${DISTRIBUTION_FOLDER}/usr/local/sbin
 ${MKDIR_P} ${DISTRIBUTION_FOLDER}/usr/local/lib
 ${MKDIR_P} ${DISTRIBUTION_FOLDER}/usr/local/lib/pkgconfig
 ${MKDIR_P} ${DISTRIBUTION_FOLDER}/usr/local/share/man/man1/
@@ -86,7 +85,7 @@ ${SED_E} "s/FUSEXFS_VERSION_LITERAL/$FUSEXFS_VERSION/g" < ${MKPKG_FOLDER}/fuse-x
 ${INSTALL_C} -m 644 ${BUILD_FOLDER}/FSInfo.plist ${DISTRIBUTION_FOLDER}/Library/Filesystems/fuse-xfs.fs/Contents/Info.plist
 ${INSTALL_C} -m 644 ${MKPKG_FOLDER}/fuse-xfs.fs/Contents/PkgInfo ${DISTRIBUTION_FOLDER}/Library/Filesystems/fuse-xfs.fs/Contents/PkgInfo
 ${INSTALL_C} -m 644 ${MKPKG_FOLDER}/fuse-xfs.fs/Contents/Resources/English.lproj/InfoPlist.strings ${DISTRIBUTION_FOLDER}/Library/Filesystems/fuse-xfs.fs/Contents/Resources/English.lproj/InfoPlist.strings
-${LN_SF} ../Library/Filesystems/fuse-xfs.fs/mount_fuse-xfs ${DISTRIBUTION_FOLDER}/sbin/mount_fuse-xfs
+${LN_SF} ../Library/Filesystems/fuse-xfs.fs/mount_fuse-xfs ${DISTRIBUTION_FOLDER}/usr/local/sbin/mount_fuse-xfs
 ${SED_E} "s/FUSEXFS_VERSION_LITERAL/$FUSEXFS_VERSION/g" < ${MKPKG_FOLDER}/Info.plist.in > ${BUILD_FOLDER}/Info.plist
 ${INSTALL_C} -m 644 ${BUILD_FOLDER}/Info.plist ${TMP_FOLDER}/Info.plist
 ${CHOWN_R} root:wheel ${TMP_FOLDER}
