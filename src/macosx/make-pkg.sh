@@ -16,7 +16,7 @@ MKDIR_P="${SUDO} mkdir -p"
 LN_SF="${SUDO} ln -sf"
 INSTALL_C="${SUDO} install -c"
 CHOWN_R="${SUDO} chown -R"
-PKGMANAGER="${SUDO} /Developer/usr/bin/packagemaker"
+PKGBUILD="${SUDO} pkgbuild"
 
 FUSEXFS_NAME="fuse-xfs"
 
@@ -91,14 +91,13 @@ ${SED_E} "s/FUSEXFS_VERSION_LITERAL/$FUSEXFS_VERSION/g" < ${MKPKG_FOLDER}/Info.p
 ${INSTALL_C} -m 644 ${BUILD_FOLDER}/Info.plist ${TMP_FOLDER}/Info.plist
 ${CHOWN_R} root:wheel ${TMP_FOLDER}
 ${SUDO} find ${DISTRIBUTION_FOLDER} -name ".hg" -type d | xargs ${SUDO} rm
-${PKGMANAGER} -build -p "${BUILD_FOLDER}/${FUSEXFS_NAME}.pkg" \
-			  -f ${DISTRIBUTION_FOLDER} \
-			  -b ./ \
-			  -ds \
-			  -v \
-			  -r ${MKPKG_FOLDER}/Install_resources/ \
-			  -i ${TMP_FOLDER}/Info.plist \
-			  -d ${MKPKG_FOLDER}/Description.plist
+${PKGBUILD} \
+			  --root ${DISTRIBUTION_FOLDER} \
+			  "${BUILD_FOLDER}/${FUSEXFS_NAME}.pkg" \
+			  --identifier Fuse-XFS\
+			  --version 0.2 \
+			  --install-location / \
+			  --scripts ${MKPKG_FOLDER}/Install_resources/
 ${CHOWN_R} root:admin "${BUILD_FOLDER}/${FUSEXFS_NAME}.pkg"
 
 sudo hdiutil create -layout NONE -megabytes 1 -fs HFS+ -volname "${FUSEXFS_NAME}-${FUSEXFS_VERSION}" "${TMP_FOLDER}/${FUSEXFS_NAME}-${FUSEXFS_VERSION}.dmg"
@@ -111,7 +110,7 @@ sudo cp -pRX "${BUILD_FOLDER}/${FUSEXFS_NAME}.pkg" "$VOLUME_PATH"
 sudo cp -pRX "${MKPKG_FOLDER}/Install_resources/VolumeIcon.icns" "$VOLUME_PATH"/.VolumeIcon.icns
 sudo mkdir "$VOLUME_PATH"/.background
 sudo cp -pRX "${MKPKG_FOLDER}/Install_resources/background.png" "$VOLUME_PATH"/.background/background.png
-sudo /Developer/Tools/SetFile -a C "$VOLUME_PATH"
+sudo SetFile -a C "$VOLUME_PATH"
 
 # Copy over the license file.
 sudo cp "${MKPKG_FOLDER}/Install_resources/README.rtf" "$VOLUME_PATH"/README.rtf
