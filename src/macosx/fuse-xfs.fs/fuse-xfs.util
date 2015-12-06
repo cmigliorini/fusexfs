@@ -82,7 +82,7 @@ EOF
 # Edit: Seems like this function doesn't work with recent MacFUSE versions.
 function GetFuseVersion ()
 {
-    VERS=`"${ROOT}/System/Library/Filesystems/fusefs.fs/Contents/Resources/mount_fusefs" --help 2>&1 | head -n 1 | awk '{ print $3 }'`
+    VERS=`"${ROOT}/Library/Filesystems/fusefs.fs/Contents/Resources/mount_fusefs" --help 2>&1 | head -n 1 | awk '{ print $3 }'`
 
     perl - "$VERS" <<-"EOF"
         $total = 0;

@@ -65,11 +65,11 @@ ${MKDIR_P} ${DISTRIBUTION_FOLDER}/usr/local/lib/pkgconfig
 ${MKDIR_P} ${DISTRIBUTION_FOLDER}/usr/local/share/man/man1/
 ${MKDIR_P} ${DISTRIBUTION_FOLDER}/usr/local/share/man/man8/
 ${MKDIR_P} ${DISTRIBUTION_FOLDER}/Library/PreferencePanes
-${MKDIR_P} ${DISTRIBUTION_FOLDER}/System/Library/Filesystems/fuse-xfs.fs
-${MKDIR_P} ${DISTRIBUTION_FOLDER}/System/Library/Filesystems/fuse-xfs.fs/Support
-${MKDIR_P} ${DISTRIBUTION_FOLDER}/System/Library/Filesystems/fuse-xfs.fs/Contents
-${MKDIR_P} ${DISTRIBUTION_FOLDER}/System/Library/Filesystems/fuse-xfs.fs/Contents/Resources
-${MKDIR_P} ${DISTRIBUTION_FOLDER}/System/Library/Filesystems/fuse-xfs.fs/Contents/Resources/English.lproj
+${MKDIR_P} ${DISTRIBUTION_FOLDER}/Library/Filesystems/fuse-xfs.fs
+${MKDIR_P} ${DISTRIBUTION_FOLDER}/Library/Filesystems/fuse-xfs.fs/Support
+${MKDIR_P} ${DISTRIBUTION_FOLDER}/Library/Filesystems/fuse-xfs.fs/Contents
+${MKDIR_P} ${DISTRIBUTION_FOLDER}/Library/Filesystems/fuse-xfs.fs/Contents/Resources
+${MKDIR_P} ${DISTRIBUTION_FOLDER}/Library/Filesystems/fuse-xfs.fs/Contents/Resources/English.lproj
 ${INSTALL_C} -m 755 ${BUILD_FOLDER}/bin/mkfs.xfs ${DISTRIBUTION_FOLDER}/usr/local/bin/mkfs.xfs
 ${INSTALL_C} -m 755 ${BUILD_FOLDER}/bin/fuse-xfs ${DISTRIBUTION_FOLDER}/usr/local/bin/fuse-xfs
 ${INSTALL_C} -m 755 ${BUILD_FOLDER}/bin/xfs-cli ${DISTRIBUTION_FOLDER}/usr/local/bin/xfs-cli
@@ -80,13 +80,13 @@ ${INSTALL_C} -m 755 ${BUILD_FOLDER}/bin/xfs-rcopy ${DISTRIBUTION_FOLDER}/usr/loc
 #${INSTALL_C} -m 755 ${BUILD_FOLDER}/fuse-xfs/fuse-xfs.uninstall ${DISTRIBUTION_FOLDER}/usr/local/bin/fuse-xfs.uninstall
 ${INSTALL_C} -m 644 ${SOURCE_FOLDER}/man/fuse-xfs.1 ${DISTRIBUTION_FOLDER}/usr/local/share/man/man1/fuse-xfs.1
 ${INSTALL_C} -m 644 ${SOURCE_FOLDER}/man/mkfs.xfs.8 ${DISTRIBUTION_FOLDER}/usr/local/share/man/man8/mkfs.xfs.8
-${INSTALL_C} -m 755 ${MKPKG_FOLDER}/fuse-xfs.fs/fuse-xfs.util ${DISTRIBUTION_FOLDER}/System/Library/Filesystems/fuse-xfs.fs/fuse-xfs.util
-${INSTALL_C} -m 755 ${MKPKG_FOLDER}/fuse-xfs.fs/mount_fuse-xfs ${DISTRIBUTION_FOLDER}/System/Library/Filesystems/fuse-xfs.fs/mount_fuse-xfs
+${INSTALL_C} -m 755 ${MKPKG_FOLDER}/fuse-xfs.fs/fuse-xfs.util ${DISTRIBUTION_FOLDER}/Library/Filesystems/fuse-xfs.fs/fuse-xfs.util
+${INSTALL_C} -m 755 ${MKPKG_FOLDER}/fuse-xfs.fs/mount_fuse-xfs ${DISTRIBUTION_FOLDER}/Library/Filesystems/fuse-xfs.fs/mount_fuse-xfs
 ${SED_E} "s/FUSEXFS_VERSION_LITERAL/$FUSEXFS_VERSION/g" < ${MKPKG_FOLDER}/fuse-xfs.fs/Contents/Info.plist.in > ${BUILD_FOLDER}/FSInfo.plist
-${INSTALL_C} -m 644 ${BUILD_FOLDER}/FSInfo.plist ${DISTRIBUTION_FOLDER}/System/Library/Filesystems/fuse-xfs.fs/Contents/Info.plist
-${INSTALL_C} -m 644 ${MKPKG_FOLDER}/fuse-xfs.fs/Contents/PkgInfo ${DISTRIBUTION_FOLDER}/System/Library/Filesystems/fuse-xfs.fs/Contents/PkgInfo
-${INSTALL_C} -m 644 ${MKPKG_FOLDER}/fuse-xfs.fs/Contents/Resources/English.lproj/InfoPlist.strings ${DISTRIBUTION_FOLDER}/System/Library/Filesystems/fuse-xfs.fs/Contents/Resources/English.lproj/InfoPlist.strings
-${LN_SF} ../System/Library/Filesystems/fuse-xfs.fs/mount_fuse-xfs ${DISTRIBUTION_FOLDER}/sbin/mount_fuse-xfs
+${INSTALL_C} -m 644 ${BUILD_FOLDER}/FSInfo.plist ${DISTRIBUTION_FOLDER}/Library/Filesystems/fuse-xfs.fs/Contents/Info.plist
+${INSTALL_C} -m 644 ${MKPKG_FOLDER}/fuse-xfs.fs/Contents/PkgInfo ${DISTRIBUTION_FOLDER}/Library/Filesystems/fuse-xfs.fs/Contents/PkgInfo
+${INSTALL_C} -m 644 ${MKPKG_FOLDER}/fuse-xfs.fs/Contents/Resources/English.lproj/InfoPlist.strings ${DISTRIBUTION_FOLDER}/Library/Filesystems/fuse-xfs.fs/Contents/Resources/English.lproj/InfoPlist.strings
+${LN_SF} ../Library/Filesystems/fuse-xfs.fs/mount_fuse-xfs ${DISTRIBUTION_FOLDER}/sbin/mount_fuse-xfs
 ${SED_E} "s/FUSEXFS_VERSION_LITERAL/$FUSEXFS_VERSION/g" < ${MKPKG_FOLDER}/Info.plist.in > ${BUILD_FOLDER}/Info.plist
 ${INSTALL_C} -m 644 ${BUILD_FOLDER}/Info.plist ${TMP_FOLDER}/Info.plist
 ${CHOWN_R} root:wheel ${TMP_FOLDER}
