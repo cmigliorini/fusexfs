@@ -174,7 +174,7 @@ function QuickVerify () {
     
     # In this case, no FSUR value is returned. Instead we must mimic whatever
     # values fsck returns. OS X expects us to do that (I think).
-    return $FSUR_IO_SUCCESS
+    return 0
 }
 
 # Verify a drive (read only fsck)
@@ -190,7 +190,6 @@ function Repair () {
     LogDebug "[Repair] Entering function Repair..."
     DEVICE=`GetDevice "$2"`
     LogDebug "[Repair] Returning from function Repair with FSUR_INVAL."
-    return 0
     return ${FSUR_INVAL} # FSUR_INVAL, defined in loadable_fs.h
 }
 
