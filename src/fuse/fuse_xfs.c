@@ -3,7 +3,6 @@
  * fuse-xfs
  *
  * Created by Alexandre Hardy on 4/16/11.
- * Copyright 2011 Nimbula. All rights reserved.
  *
  */
 
@@ -65,9 +64,12 @@ fuse_xfs_readlink(const char *path, char *buf, size_t size) {
         return -ENOENT;
     }
     
-    r = xfs_readlink(inode, buf, offset, size, NULL);
+    r = xfs_readlink(inode, buf, 0, size);
+    if (r < 0) {
+        return r;
+    }
     libxfs_iput(inode, 0);
-    return r;
+    return 0;
 }
 
 struct filler_info_struct {
@@ -245,12 +247,12 @@ fuse_xfs_fsync(const char *path, int isdatasync, struct fuse_file_info *fi) {
 
 static int
 fuse_xfs_setxattr(const char *path, const char *name, const char *value,
-                  size_t size, int flags) {
+                  size_t size, int flags, uint32_t a) {
     return -ENOTSUP;
  }
 
 static int
-fuse_xfs_getxattr(const char *path, const char *name, char *value, size_t size) {
+fuse_xfs_getxattr(const char *path, const char *name, char *value, size_t size, uint32_t a) {
     return -ENOATTR;
 }
 
