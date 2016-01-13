@@ -3,6 +3,7 @@
  * fuse-xfs
  *
  * Created by Alexandre Hardy on 4/16/11.
+ * Copyright 2011 Nimbula. All rights reserved.
  *
  */
 
@@ -10,7 +11,7 @@
 #include <string.h>
 #include <errno.h>
 #include <sys/stat.h>
-#include <fuse_xfs.h>
+#include <fuse-xfs.h>
 #include <xfsutil.h>
 
 #ifdef DEBUG
@@ -64,12 +65,9 @@ fuse_xfs_readlink(const char *path, char *buf, size_t size) {
         return -ENOENT;
     }
     
-    r = xfs_readlink(inode, buf, 0, size);
-    if (r < 0) {
-        return r;
-    }
+    r = xfs_readlink(inode, buf, offset, size, NULL);
     libxfs_iput(inode, 0);
-    return 0;
+    return r;
 }
 
 struct filler_info_struct {
@@ -173,17 +171,16 @@ fuse_xfs_create(const char *path, mode_t mode, struct fuse_file_info *fi) {
 static int
 fuse_xfs_open(const char *path, struct fuse_file_info *fi) {
     int r;
-    xfs_file_handle_t *handle = (xfs_file_handle_t *)malloc(sizeof(xfs_file_handle_t));
+    xfs_inode_t *inode=NULL;
     
     log_debug("open %s\n", path); 
     
-    r = xfs_open(current_xfs_mount(), path, handle);
+    r = find_path(current_xfs_mount(), path, &inode);
     if (r) {
-        free(handle);
         return -ENOENT;
     }
     
-    fi->fh = (uint64_t)handle;
+    fi->fh = (uint64_t)inode;
     return 0;
 }
 
@@ -192,7 +189,7 @@ fuse_xfs_read(const char *path, char *buf, size_t size, off_t offset,
               struct fuse_file_info *fi) {
     int r;
     log_debug("read %s\n", path); 
-    r = xfs_read((xfs_file_handle_t *)fi->fh, buf, offset, size);
+    r = xfs_readfile((xfs_inode_t *)fi->fh, buf, offset, size, NULL);
     return r;
 }
 
@@ -236,10 +233,8 @@ fuse_xfs_flush(const char *path, struct fuse_file_info *fi) {
 
 static int
 fuse_xfs_release(const char *path, struct fuse_file_info *fi) {
-    xfs_file_handle_t *handle = (xfs_file_handle_t *)fi->fh;
-    log_debug("release %s\n", path);
-    xfs_close(handle);
-    free(handle);
+    log_debug("release %s\n", path); 
+    libxfs_iput((xfs_inode_t *)fi->fh, 0);
     return 0;
 }
 
@@ -250,12 +245,12 @@ fuse_xfs_fsync(const char *path, int isdatasync, struct fuse_file_info *fi) {
 
 static int
 fuse_xfs_setxattr(const char *path, const char *name, const char *value,
-                  size_t size, int flags, uint32_t a) {
+                  size_t size, int flags) {
     return -ENOTSUP;
  }
 
 static int
-fuse_xfs_getxattr(const char *path, const char *name, char *value, size_t size, uint32_t a) {
+fuse_xfs_getxattr(const char *path, const char *name, char *value, size_t size) {
     return -ENOATTR;
 }
 

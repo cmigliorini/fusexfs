@@ -58,7 +58,7 @@ int cli_ls_xfs_filldir(void *dirents, const char *name, int namelen, off_t offse
     
     printf(" %s", dname);
     if (xfs_is_link(inode)) {
-        r = xfs_readlink(inode, symlink, 0, 255);
+        r = xfs_readlink(inode, symlink, 0, 255, NULL);
         if (r > 0) {
             symlink[r] = '\0';
             printf("->%s", symlink);
@@ -153,7 +153,6 @@ int main(int argc, char *argv[]) {
     xfs_mount_t	*mp;
     xfs_inode_t *inode = NULL;
     xfs_off_t ofs;
-    xfs_file_handle_t handle;
     struct filldir_data filldata;
     char *progname;
     char *source_name;
@@ -225,20 +224,18 @@ int main(int argc, char *argv[]) {
                 //TODO: check if it is a file
                 r = 10;
                 offset = 0;
-                xfs_open(mp, newpath, &handle);
                 while (r) {
-                    r = xfs_read(&handle, buffer, offset, BUFSIZE);
+                    r = xfs_readfile(inode, buffer, offset, BUFSIZE, NULL);
                     if (r) {
                         write(1, buffer, r);
                         offset += r;
                     }
                 }
-                xfs_close(&handle);
             } else if (xfs_is_link(inode)) {
                 r = 10;
                 offset = 0;
                 while (r) {
-                    r = xfs_readlink(inode, buffer, offset, BUFSIZE);
+                    r = xfs_readlink(inode, buffer, offset, BUFSIZE, NULL);
                     if (r) {
                         write(1, buffer, r);
                         offset += r;
@@ -260,16 +257,14 @@ int main(int argc, char *argv[]) {
                 if (fd < 0) {
                     printf("Failed to open local file\n");
                 } else {
-                    xfs_open(mp, newpath, &handle);
                     while (r) {
-                        r = xfs_read(&handle, buffer, offset, BUFSIZE);
+                        r = xfs_readfile(inode, buffer, offset, BUFSIZE, NULL);
                         if (r) {
                             write(fd, buffer, r);
                             offset += r;
                         }
                     }
                     close(fd);
-                    xfs_close(&handle);
                     printf("Retrieved %lld bytes\n", offset);
                 }
             } else {
