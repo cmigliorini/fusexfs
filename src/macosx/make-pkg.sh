@@ -95,7 +95,7 @@ ${PKGBUILD} \
 			  --root ${DISTRIBUTION_FOLDER} \
 			  "${BUILD_FOLDER}/${FUSEXFS_NAME}.pkg" \
 			  --identifier Fuse-XFS\
-			  --version 0.2 \
+			  --version 0.2.1 \
 			  --install-location / \
 			  --scripts ${MKPKG_FOLDER}/Install_resources/
 ${CHOWN_R} root:admin "${BUILD_FOLDER}/${FUSEXFS_NAME}.pkg"
