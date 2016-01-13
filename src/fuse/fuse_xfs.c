@@ -11,7 +11,7 @@
 #include <string.h>
 #include <errno.h>
 #include <sys/stat.h>
-#include <fuse-xfs.h>
+#include <fuse_xfs.h>
 #include <xfsutil.h>
 
 #ifdef DEBUG
